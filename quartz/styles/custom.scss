@@ -1,3 +1,99 @@
 @use "./base.scss";
 
-// put your custom CSS here!
+/* Override default styles */
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+thead {
+    font-weight: 500;
+}
+
+h1 a,
+h2 a,
+h3 a,
+h4 a,
+h5 a,
+h6 a {
+    text-decoration: none;
+}
+
+p,
+li {
+    line-height: unset;
+}
+
+button#toc h3 {
+    font-size: unset;
+    line-height: unset;
+}
+
+/* Topography */
+
+p.meta time {
+    font-family: var(--codeFont);
+    font-size: 0.9em;
+}
+
+/* Hide sidebar and reveal on hover */
+
+.page>#quartz-body .sidebar,
+#explorer-content {
+    opacity: 0;
+}
+
+.page>#quartz-body .sidebar:hover {
+    opacity: 1;
+}
+
+/* Footnotes */
+
+footer li {
+    list-style-type: none;
+}
+
+.footnotes {
+    border-top: none !important;
+    font-size: 0.9em;
+    text-decoration: none;
+    font-weight: 500;
+    padding-left: 0.1em;
+}
+
+/* Links */
+
+a {
+    font-weight: unset !important;
+    color: var(--secondary);
+    text-decoration: underline;
+
+    &:hover {
+        color: var(--tertiary);
+    }
+}
+
+a.internal {
+    background-color: unset !important;
+}
+
+a.external .external-icon {
+    display: none;
+}
+
+a:not(.tag-link):not(.internal):not([href^="#"]):not([href^="/"]):not([href^="."]):not([href=""])::after {
+    content: "↗";
+}
+
+.breadcrumb-element a {
+    font-size: 18px;
+}
+
+/* Metadata */
+
+.content-meta {
+    margin-top: 0.5rem;
+    font-size: 18px;
+}
