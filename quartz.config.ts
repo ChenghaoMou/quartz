@@ -15,7 +15,7 @@ const config: QuartzConfig = {
     analytics: null,
     locale: "en-US",
     baseUrl: "sleeplessindebugging.blog",
-    ignorePatterns: ["private", "templates", ".obsidian", "4archives", "journal", "public", "boilerplates"],
+    ignorePatterns: ["private", "templates", ".obsidian", "4archives", "journal", "public", "boilerplates", "highlights/Archive"],
     defaultDateType: "created",
     generateSocialImages: false,
     theme: {
@@ -56,7 +56,7 @@ const config: QuartzConfig = {
     transformers: [
       Plugin.FrontMatter(),
       Plugin.CreatedModifiedDate({
-        priority: ["frontmatter", "filesystem"],
+        priority: ["frontmatter", "git", "filesystem"],
       }),
       Plugin.SyntaxHighlighting({
         theme: {
@@ -80,8 +80,8 @@ const config: QuartzConfig = {
       Plugin.FolderPage(),
       Plugin.TagPage(),
       Plugin.ContentIndex({
-        enableSiteMap: true,
-        enableRSS: true,
+        enableSiteMap: false,
+        enableRSS: false,
       }),
       Plugin.Assets(),
       Plugin.Static(),
