@@ -22,6 +22,23 @@ h6 a {
 }
 
 p,
+ul,
+text,
+a,
+tr,
+td,
+li,
+ol,
+ul,
+.katex,
+.math {
+  color:var(--dark);
+  fill:var(--dark);
+  -webkit-hyphens:auto;
+  hyphens:auto
+}
+
+p,
 li {
     line-height: unset;
 }
@@ -72,7 +89,7 @@ footer li {
 
 a {
     font-weight: unset !important;
-    color: var(--secondary);
+    color: var(--darkgray);
     text-decoration: underline;
 
     &:hover {
