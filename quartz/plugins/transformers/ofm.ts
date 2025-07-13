@@ -432,6 +432,10 @@ export const ObsidianFlavoredMarkdown: QuartzTransformerPlugin<Partial<Options>>
 
               const match = firstLine.match(calloutRegex)
               if (match && match.input) {
+                // Skip processing if this was already processed by sidenotes plugin
+                if (match.input.includes("SIDENOTE_START") || match.input.includes("aside-")) {
+                  return
+                }
                 const [calloutDirective, typeString, calloutMetaData, collapseChar] = match
                 const calloutType = canonicalizeCallout(typeString.toLowerCase())
                 const collapse = collapseChar === "+" || collapseChar === "-"

@@ -1,0 +1,166 @@
+.sidenote {
+  width: 100%;
+  max-width: 300px;
+  padding: 1rem;
+  margin: 1rem auto;
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  background: var(--light);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  border-left: 4px solid var(--secondary);
+  z-index: 1000;
+  transition: box-shadow 0.2s ease, z-index 0s;
+  cursor: pointer;
+
+  &:hover {
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  }
+
+  &.sidenote-active {
+    box-shadow: 0 6px 30px rgba(0, 0, 0, 0.2);
+    transform: translateY(-1px);
+  }
+
+  &.sidenote-l {
+    border-left-color: #3b82f6;
+  }
+
+  &.sidenote-r {
+    border-left-color: #10b981;
+  }
+
+  .sidenote-title {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    cursor: pointer;
+
+    .sidenote-icon {
+      width: 16px;
+      height: 16px;
+      background: var(--secondary);
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .sidenote-title-inner {
+      flex-grow: 1;
+    }
+
+    .sidenote-fold-icon {
+      width: 16px;
+      height: 16px;
+      background: var(--gray);
+      border-radius: 3px;
+      position: relative;
+      cursor: pointer;
+      transition: transform 0.2s ease;
+
+      &::before,
+      &::after {
+        content: "";
+        position: absolute;
+        background: var(--darkgray);
+        border-radius: 1px;
+      }
+
+      &::before {
+        width: 8px;
+        height: 2px;
+        top: 7px;
+        left: 4px;
+      }
+
+      &::after {
+        width: 2px;
+        height: 8px;
+        top: 4px;
+        left: 7px;
+        transition: opacity 0.2s ease;
+      }
+    }
+  }
+
+  .sidenote-content {
+    overflow: hidden;
+    transition: all 0.3s ease;
+
+    .sidenote-content-inner {
+      padding: 0;
+      margin: 0;
+    }
+  }
+
+  &.is-collapsible.is-collapsed {
+    .sidenote-content {
+      height: 0;
+      opacity: 0;
+    }
+
+    .sidenote-fold-icon {
+      transform: rotate(90deg);
+
+      &::after {
+        opacity: 0;
+      }
+    }
+  }
+
+  // Advanced positioning for larger screens with sufficient space
+  @media (min-width: 1400px) {
+    position: fixed;
+    width: 280px;
+    margin: 0;
+    z-index: 10000; // Higher z-index to ensure they're clickable above all other elements
+    // Don't set top here - let JavaScript handle positioning
+
+    &.sidenote-l {
+      left: calc(40vw - 600px);
+    }
+
+    &.sidenote-r {
+      right: calc(40vw - 600px);
+    }
+  }
+
+  // Fine-tune for very wide screens
+  @media (min-width: 1800px) {
+    &.sidenote-l {
+      left: calc(40vw - 700px);
+    }
+
+    &.sidenote-r {
+      right: calc(40vw - 700px);
+    }
+  }
+
+  // Dark mode
+  @media (prefers-color-scheme: dark) {
+    background: var(--dark);
+    border-color: var(--darkgray);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+  }
+}
+
+// Different types of sidenotes
+.sidenote.note .sidenote-icon {
+  background: #3b82f6;
+}
+
+.sidenote.warning .sidenote-icon {
+  background: #f59e0b;
+}
+
+.sidenote.error .sidenote-icon {
+  background: #ef4444;
+}
+
+.sidenote.success .sidenote-icon {
+  background: #10b981;
+}
+
+.sidenote.info .sidenote-icon {
+  background: #06b6d4;
+}
