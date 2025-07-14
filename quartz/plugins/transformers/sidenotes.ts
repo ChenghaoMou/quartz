@@ -25,7 +25,6 @@ export const Sidenotes: QuartzTransformerPlugin<Partial<Options>> = (userOpts) =
 
       // Transform sidenote callouts to HTML at text level to avoid conflicts with other plugins
       return src.replace(sidenoteBlockRegex, (match, typeString, position, collapseChar, titleText, content) => {
-        console.log("SIDENOTES PLUGIN: Processing sidenote", { typeString, position, collapseChar, titleText })
         const isCollapsible = collapseChar === "+" || collapseChar === "-"
         const defaultState = collapseChar === "-" ? "collapsed" : "expanded"
         const titleContent = titleText.trim() || typeString.charAt(0).toUpperCase() + typeString.slice(1)

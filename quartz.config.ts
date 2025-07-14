@@ -24,6 +24,7 @@ const config: QuartzConfig = {
       "public",
       "boilerplates",
       "highlights/Archive",
+      "**/__order__.md",
     ],
     defaultDateType: "created",
     theme: {
