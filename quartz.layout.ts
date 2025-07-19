@@ -21,13 +21,13 @@ export const defaultContentPageLayout: PageLayout = {
     // Component.ArticleTitle(),
     Component.ContentMeta(),
     Component.TagList(),
+    Component.SidenotesToggle(),
   ],
   left: [
     Component.PageTitle(),
     Component.MobileOnly(Component.Spacer()),
     Component.Search(),
     Component.Darkmode(),
-    Component.SidenotesToggle(),
     // Component.DesktopOnly(Component.Explorer()),
   ],
   right: [
@@ -45,7 +45,6 @@ export const defaultListPageLayout: PageLayout = {
     Component.MobileOnly(Component.Spacer()),
     Component.Search(),
     Component.Darkmode(),
-    Component.SidenotesToggle(),
     // Component.DesktopOnly(Component.Explorer()),
   ],
   right: [],

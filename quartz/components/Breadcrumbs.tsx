@@ -29,8 +29,8 @@ interface BreadcrumbOptions {
 }
 
 const defaultOptions: BreadcrumbOptions = {
-  spacerSymbol: " • ",
-  rootName: "Home",
+  spacerSymbol: "/",
+  rootName: "sleepless@debugging:",
   resolveFrontmatterTitle: true,
   showCurrentPage: true,
 }
@@ -78,12 +78,19 @@ export default ((opts?: Partial<BreadcrumbOptions>) => {
 
     return (
       <nav class={classNames(displayClass, "breadcrumb-container")} aria-label="breadcrumbs">
-        {crumbs.map((crumb, index) => (
-          <div class="breadcrumb-element">
-            <a href={crumb.path}>{crumb.displayName}</a>
-            {index !== crumbs.length - 1 && <p>{` ${options.spacerSymbol} `}</p>}
-          </div>
-        ))}
+        <span class="terminal-prompt">
+          <span class="prompt-user">sleepless</span>
+          <span class="prompt-separator">@debugging:</span>
+          <span class="prompt-path">/
+            {crumbs.slice(1).map((crumb, index) => (
+              <>
+                <a href={crumb.path} class="path-segment">{crumb.displayName}</a>
+                {index !== crumbs.length - 2 && <span>/</span>}
+              </>
+            ))}
+          </span>
+          <span class="prompt-cursor">$ █</span>
+        </span>
       </nav>
     )
   }

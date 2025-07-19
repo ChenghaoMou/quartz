@@ -1,48 +1,23 @@
-/* Make darkmode and sidenotes toggle appear on same line */
+/* Sidenotes toggle button */
 .sidenotes-toggle {
   cursor: pointer;
-  padding: 0;
-  position: relative;
-  background: none;
-  border: none;
-  width: 20px;
-  height: 20px;
-  margin: 0;
-  text-align: inherit;
-  flex-shrink: 0;
+  padding: 0.5rem 1rem;
+  background: var(--lightgray);
+  border: 1px solid var(--gray);
+  border-radius: 4px;
+  color: var(--darkgray);
+  font-size: 0.85rem;
+  font-family: inherit;
+  transition: all 0.2s ease;
+  margin: 0.5rem 0;
 
-  & svg {
-    position: absolute;
-    width: 20px;
-    height: 20px;
-    top: calc(50% - 10px);
-    fill: var(--darkgray);
-    stroke: var(--darkgray);
-    transition: opacity 0.1s ease;
+  &:hover {
+    background: var(--gray);
+    color: var(--dark);
   }
 }
 
 /* Hide sidenotes when the body has the sidenotes-hidden class */
 body.sidenotes-hidden .sidenote {
   display: none !important;
-}
-
-/* Default state: sidenotes are visible, show "hide" icon */
-.sidenotes-toggle {
-  & > .hideIcon {
-    display: inline;
-  }
-  & > .showIcon {
-    display: none;
-  }
-}
-
-/* When sidenotes are hidden, show "show" icon */
-body.sidenotes-hidden .sidenotes-toggle {
-  & > .hideIcon {
-    display: none;
-  }
-  & > .showIcon {
-    display: inline;
-  }
 }

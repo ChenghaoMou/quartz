@@ -122,6 +122,11 @@ a:not(.tag-link):not(.internal):not([href^="#"]):not([href^="/"]):not([href^="."
     font-size: 1em;
 }
 
+.page-header .content-meta,
+.page-header .tag-link{
+    color: var(--lightgray);
+}
+
 /* Selection */
 
 ::selection {
