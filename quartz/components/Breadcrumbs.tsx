@@ -1,8 +1,8 @@
-import { QuartzComponent, QuartzComponentConstructor, QuartzComponentProps } from "./types"
-import breadcrumbsStyle from "./styles/breadcrumbs.scss"
-import { FullSlug, SimpleSlug, resolveRelative, simplifySlug } from "../util/path"
-import { classNames } from "../util/lang"
 import { trieFromAllFiles } from "../util/ctx"
+import { classNames } from "../util/lang"
+import { FullSlug, SimpleSlug, resolveRelative, simplifySlug } from "../util/path"
+import breadcrumbsStyle from "./styles/breadcrumbs.scss"
+import { QuartzComponent, QuartzComponentConstructor, QuartzComponentProps } from "./types"
 
 type CrumbData = {
   displayName: string
@@ -82,7 +82,7 @@ export default ((opts?: Partial<BreadcrumbOptions>) => {
           <span class="prompt-user">sleepless</span>
           <span class="prompt-separator">@debugging:</span>
           <span class="prompt-path">/
-            {crumbs.slice(1).map((crumb, index) => (
+            {crumbs.slice(1, -1).map((crumb, index) => (
               <>
                 <a href={crumb.path} class="path-segment">{crumb.displayName}</a>
                 {index !== crumbs.length - 2 && <span>/</span>}

@@ -75,6 +75,7 @@ const config: QuartzConfig = {
         keepBackground: false,
       }),
       Plugin.Sidenotes(),
+      Plugin.HardLineBreaks(),
       Plugin.ObsidianFlavoredMarkdown({ enableInHtmlEmbed: false }),
       Plugin.GitHubFlavoredMarkdown(),
       Plugin.TableOfContents(),
