@@ -4,8 +4,17 @@ import * as Component from "./quartz/components"
 // components shared across all pages
 export const sharedPageComponents: SharedLayout = {
   head: Component.Head(),
-  header: [],
-  afterBody: [],
+  header: [
+    // Row 1: Navigation - left side (Breadcrumbs with site identity) and right side (Search + Darkmode)
+    // Header component handles the layout with space-between
+    Component.Breadcrumbs(),
+    Component.Search(),
+    Component.Darkmode(),
+  ],
+  afterBody: [
+    // Backlinks appear at the end of the article
+    Component.Backlinks(),
+  ],
   footer: Component.Footer({
     links: {
       "Source Code": "https://codeberg.org/Chenghao2023/blog",
@@ -16,40 +25,17 @@ export const sharedPageComponents: SharedLayout = {
 
 // components for pages that display a single page (e.g. a single note)
 export const defaultContentPageLayout: PageLayout = {
-  beforeBody: [
-    Component.Breadcrumbs(),
-    // Component.ArticleTitle(),
-    Component.ContentMeta(),
-    Component.TagList(),
-    Component.SidenotesToggle(),
-  ],
+  beforeBody: [Component.ContentMeta(), Component.TagList()],
   left: [
-    Component.PageTitle(),
-    Component.MobileOnly(Component.Spacer()),
-    Component.Search(),
-    Component.Darkmode(),
-    // Component.DesktopOnly(Component.Explorer()),
-  ],
-  right: [
-    // Component.Graph(),
+    // Col 1: Table of Contents (sticky)
     Component.DesktopOnly(Component.TableOfContents()),
-    Component.Backlinks(),
   ],
+  right: [],
 }
 
-// components for pages that display lists of pages  (e.g. tags or folders)
+// components for pages that display lists of pages (e.g. tags or folders)
 export const defaultListPageLayout: PageLayout = {
-  beforeBody: [
-    Component.Breadcrumbs(),
-    // Component.ArticleTitle(), 
-    Component.ContentMeta()
-  ],
-  left: [
-    Component.PageTitle(),
-    Component.MobileOnly(Component.Spacer()),
-    Component.Search(),
-    Component.Darkmode(),
-    // Component.DesktopOnly(Component.Explorer()),
-  ],
+  beforeBody: [Component.ContentMeta()],
+  left: [],
   right: [],
 }

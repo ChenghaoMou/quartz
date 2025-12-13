@@ -29,35 +29,36 @@ const config: QuartzConfig = {
     ],
     defaultDateType: "created",
     theme: {
-      fontOrigin: "googleFonts",
+      fontOrigin: "local",
       cdnCaching: true,
       typography: {
-        header: "IBM Plex Sans",
-        body: "IBM Plex Sans",
-        code: "JetBrains Mono",
+        header: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif",
+        body: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif",
+        code: "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace",
       },
       colors: {
+        // Flexoki color palette - https://stephango.com/flexoki
         lightMode: {
-          light: "#f4f3ee",
-          lightgray: "#f2b39b",
-          gray: "#4a4a4a",
-          darkgray: "#2c2c2c",
-          dark: "#1a1a1a",
-          secondary: "#e07a5f",
-          tertiary: "#81b29a",
-          highlight: "#f2b39b",
-          textHighlight: "#81b29a",
+          light: "#FFFCF0",      // paper (bg)
+          lightgray: "#E6E4D9",  // base-100 (ui)
+          gray: "#6F6E69",       // base-600 (tx-2)
+          darkgray: "#1C1B1A",   // base-950 (tx)
+          dark: "#100F0F",       // black
+          secondary: "#205EA6",  // blue-600 (links)
+          tertiary: "#24837B",   // cyan-600 (hover)
+          highlight: "#F2F0E5",  // base-50
+          textHighlight: "#D0A215", // yellow-400
         },
         darkMode: {
-          light: "#2c2c2c",
-          lightgray: "#4a4a4a",
-          gray: "#6b9c7a",
-          darkgray: "#f4f3ee",
-          dark: "#ffffff",
-          secondary: "#e07a5f",
-          tertiary: "#81b29a",
-          highlight: "#e07a5f",
-          textHighlight: "#81b29a",
+          light: "#100F0F",      // black (bg)
+          lightgray: "#282726",  // base-900 (ui)
+          gray: "#575653",       // base-700 (tx-3)
+          darkgray: "#CECDC3",   // base-200 (tx)
+          dark: "#FFFCF0",       // paper
+          secondary: "#4385BE",  // blue-400 (links)
+          tertiary: "#3AA99F",   // cyan-400 (hover)
+          highlight: "#1C1B1A",  // base-950
+          textHighlight: "#AD8301", // yellow-600
         },
       },
     },
