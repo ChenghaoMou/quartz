@@ -23,6 +23,7 @@ const config: QuartzConfig = {
       "journal",
       "public",
       "boilerplates",
+      "inbox",
       "highlights/Archive",
       "**/__order__.md",
     ],
@@ -90,7 +91,10 @@ const config: QuartzConfig = {
       Plugin.ContentPage(),
       Plugin.FolderPage({
         sort(f1, f2) {
-          return (f2.dates?.created ?? new Date()).getTime() - (f1.dates?.created ?? new Date()).getTime()
+          return (
+            (f2.dates?.created ?? new Date()).getTime() -
+            (f1.dates?.created ?? new Date()).getTime()
+          )
         },
       }),
       Plugin.TagPage(),
