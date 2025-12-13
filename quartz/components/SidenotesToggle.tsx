@@ -12,8 +12,37 @@ const SidenotesToggle: QuartzComponent = ({ displayClass }: QuartzComponentProps
       aria-label="Toggle sidenotes visibility"
       style="display: none;"
     >
-      <span class="hideText">Hide Sidenotes</span>
-      <span class="showText">Show Sidenotes</span>
+      {/* Icon when sidenotes are visible (panels with right panel filled) */}
+      <svg
+        class="showIcon"
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <title>Hide Sidenotes</title>
+        <rect x="3" y="3" width="18" height="18" rx="2" />
+        <line x1="15" y1="3" x2="15" y2="21" />
+        <rect x="15" y="3" width="6" height="18" rx="0" fill="currentColor" opacity="0.3" />
+      </svg>
+      {/* Icon when sidenotes are hidden (panels with right panel empty) */}
+      <svg
+        class="hideIcon"
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <title>Show Sidenotes</title>
+        <rect x="3" y="3" width="18" height="18" rx="2" />
+        <line x1="15" y1="3" x2="15" y2="21" />
+      </svg>
     </button>
   )
 }

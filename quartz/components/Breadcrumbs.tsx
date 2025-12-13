@@ -30,9 +30,9 @@ interface BreadcrumbOptions {
 
 const defaultOptions: BreadcrumbOptions = {
   spacerSymbol: "/",
-  rootName: "sleepless@debugging:",
+  rootName: "Sleepless in Debugging",
   resolveFrontmatterTitle: true,
-  showCurrentPage: true,
+  showCurrentPage: false,
 }
 
 function formatCrumb(displayName: string, baseSlug: FullSlug, currentSlug: SimpleSlug): CrumbData {
@@ -78,19 +78,16 @@ export default ((opts?: Partial<BreadcrumbOptions>) => {
 
     return (
       <nav class={classNames(displayClass, "breadcrumb-container")} aria-label="breadcrumbs">
-        <span class="terminal-prompt">
-          <span class="prompt-user">sleepless</span>
-          <span class="prompt-separator">@debugging:</span>
-          <span class="prompt-path">/
-            {crumbs.slice(1, -1).map((crumb, index) => (
-              <>
-                <a href={crumb.path} class="path-segment">{crumb.displayName}</a>
-                {index !== crumbs.length - 2 && <span>/</span>}
-              </>
-            ))}
-          </span>
-          <span class="prompt-cursor">$ █</span>
-        </span>
+        {crumbs.map((crumb, index) => (
+          <>
+            {index > 0 && <span class="breadcrumb-separator">{options.spacerSymbol}</span>}
+            {crumb.path ? (
+              <a href={crumb.path} class="breadcrumb-element">{crumb.displayName}</a>
+            ) : (
+              <span class="breadcrumb-element current">{crumb.displayName}</span>
+            )}
+          </>
+        ))}
       </nav>
     )
   }

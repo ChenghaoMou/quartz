@@ -1,76 +1,117 @@
 @use "./base.scss";
+@use "./variables.scss" as *;
 
-/* Override default styles */
+/* ============================================
+   Flexoki Minimalist Theme
+   A clean, modern reading experience
+   ============================================ */
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6,
-thead {
+/* Typography - Minimalist headers */
+h1, h2, h3, h4, h5, h6, thead {
     font-weight: 500;
+    letter-spacing: -0.01em;
 }
 
-h1 a,
-h2 a,
-h3 a,
-h4 a,
-h5 a,
-h6 a {
+h1 {
+    font-size: 1.75rem;
+    margin-top: 0;
+}
+
+h2 { font-size: 1.4rem; }
+h3 { font-size: 1.15rem; }
+h4, h5, h6 { font-size: 1rem; }
+
+h1 a, h2 a, h3 a, h4 a, h5 a, h6 a {
     text-decoration: none;
 }
 
-p,
-ul,
-text,
-a,
-tr,
-td,
-li,
-ol,
-ul,
-.katex,
-.math {
-  color:var(--dark);
-  fill:var(--dark);
-  -webkit-hyphens:auto;
-  hyphens:auto
+/* Body text */
+p, ul, text, a, tr, td, li, ol, .katex, .math {
+    color: var(--darkgray);
+    fill: var(--darkgray);
+    -webkit-hyphens: auto;
+    hyphens: auto;
 }
 
-p,
-li {
-    line-height: unset;
+p, li {
+    line-height: 1.7;
 }
 
+/* Table of Contents button */
 button#toc h3 {
     font-size: unset;
     line-height: unset;
 }
 
-/* Topography */
-
+/* Metadata typography */
 p.meta time {
     font-family: var(--codeFont);
-    font-size: 0.9em;
+    font-size: 0.85em;
+    color: var(--gray);
 }
 
-/* Hide sidebar and reveal on hover */
+/* ============================================
+   Layout - Three Column Design
+   ============================================ */
 
-.page>#quartz-body .sidebar{
-    opacity: 0;
-    transition: opacity 0.3s ease-in;
-}
-
-.page>#quartz-body .sidebar:hover {
+/* Sidebars are always visible on desktop */
+.page > #quartz-body .sidebar {
     opacity: 1;
-    transition: opacity 0.3s ease-out;
+    transition: none;
 }
 
-/* Footnotes */
+/* Left sidebar - Table of Contents */
+.page > #quartz-body .sidebar.left {
+    padding-top: 0;
+    padding-left: 0;
+    padding-right: 1rem;
+    
+    @media all and ($mobile) {
+        display: none;
+    }
+}
+
+/* Right sidebar - Backlinks and Sidenotes */
+.page > #quartz-body .sidebar.right {
+    padding-top: 0;
+    padding-right: 0;
+    padding-left: 1rem;
+    border-left: 1px solid var(--lightgray);
+    
+    @media all and ($mobile) {
+        border-left: none;
+        padding-left: 0;
+    }
+}
+
+/* TOC styling */
+.toc {
+    font-size: 0.85rem;
+    
+    .depth-1 { font-weight: 500; }
+    .depth-2 { padding-left: 0.75rem; }
+    .depth-3 { padding-left: 1.5rem; }
+    
+    a {
+        text-decoration: none;
+        color: var(--gray);
+        
+        &:hover {
+            color: var(--secondary);
+        }
+    }
+}
+
+/* ============================================
+   Footer
+   ============================================ */
 
 footer {
-    font-size: 0.9em;
+    font-size: 0.85em;
+    color: var(--gray);
+    padding-top: 3rem;
+    margin-top: 4rem;
+    border-top: 1px solid var(--lightgray);
 }
 
 footer li {
@@ -85,15 +126,19 @@ footer li {
     padding-left: 0.1em;
 }
 
-/* Links */
+/* ============================================
+   Links - Minimalist styling
+   ============================================ */
 
 a {
     font-weight: unset !important;
-    color: var(--darkgray);
-    text-decoration: underline;
+    color: var(--secondary);
+    text-decoration: none;
+    transition: color 0.15s ease;
 
     &:hover {
         color: var(--tertiary);
+        text-decoration: underline;
     }
 }
 
@@ -105,25 +150,169 @@ a.external .external-icon {
     display: none;
 }
 
+/* External link indicator */
 a:not(.tag-link):not(.internal):not([href^="#"]):not([href^="/"]):not([href^="."]):not([href=""])::after {
     content: "↗";
     text-decoration: none;
     display: inline-block;
+    font-size: 0.75em;
+    margin-left: 0.15em;
+    opacity: 0.7;
+}
+
+/* Breadcrumbs */
+.breadcrumb-container {
+    font-size: 0.9em;
 }
 
 .breadcrumb-element a {
     font-size: 1em;
+    color: var(--gray);
+    
+    &:hover {
+        color: var(--secondary);
+    }
 }
 
-/* Metadata */
+/* ============================================
+   Vertical Spacing - Breathing Room
+   ============================================ */
 
+/* Space after header */
+.page-header {
+    margin-bottom: 3rem;
+}
+
+/* Content meta (date, reading time) */
 .content-meta {
-    margin-top: 0.5rem;
-    font-size: 1em;
+    margin-top: 0;
+    margin-bottom: 0.5rem;
+    font-size: 0.9em;
+    color: var(--gray);
 }
 
-/* Selection */
+/* Article title */
+article > h1:first-of-type {
+    margin-top: 0;
+    margin-bottom: 2rem;
+}
+
+/* Space between article and backlinks - only show border if has visible content */
+.page-footer {
+    margin-top: 4rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--lightgray);
+    
+    /* Hide border when only contains hidden search */
+    &:not(:has(.backlinks)) {
+        border-top: none;
+        margin-top: 0;
+        padding-top: 0;
+    }
+}
+
+/* ============================================
+   Selection
+   ============================================ */
 
 ::selection {
-    color: var(--lightgray);
+    background-color: var(--textHighlight);
+    color: var(--dark);
+}
+
+/* ============================================
+   Page Title in Header
+   ============================================ */
+
+.page-title {
+    font-size: 1rem;
+    font-weight: 500;
+    
+    a {
+        color: var(--dark);
+        text-decoration: none;
+        
+        &:hover {
+            color: var(--secondary);
+        }
+    }
+}
+
+/* ============================================
+   Dark mode toggle
+   ============================================ */
+
+.darkmode {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    svg {
+        width: 20px;
+        height: 20px;
+        fill: var(--gray);
+        transition: fill 0.15s ease;
+    }
+    
+    &:hover svg {
+        fill: var(--secondary);
+    }
+}
+
+/* ============================================
+   Mobile Adjustments
+   ============================================ */
+
+@media all and ($mobile) {
+    .page > #quartz-body {
+        padding: 0 1rem;
+    }
+    
+    header {
+        flex-wrap: wrap;
+    }
+    
+    .center {
+        padding: 0;
+    }
+}
+
+/* ============================================
+   Backlinks
+   ============================================ */
+
+.backlinks {
+    font-size: 0.85rem;
+    margin-bottom: 2rem;
+    
+    h3 {
+        font-size: 0.9rem;
+        font-weight: 500;
+        color: var(--gray);
+        margin-bottom: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+    
+    ul {
+        padding-left: 0;
+        list-style: none;
+        margin: 0;
+    }
+    
+    li {
+        margin-bottom: 0.5rem;
+    }
+    
+    a {
+        color: var(--gray);
+        
+        &:hover {
+            color: var(--secondary);
+        }
+    }
 }

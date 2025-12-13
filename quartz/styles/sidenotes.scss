@@ -1,45 +1,28 @@
+// Container for sidenotes - positioned to the right of content
+.center {
+  position: relative;
+}
+
+// Flexoki-themed sidenotes - positioned in right margin on wide screens
 .sidenote {
-  width: 100%;
-  max-width: 300px;
-  padding: 1rem;
-  margin: 1rem auto;
-  border: 1px solid var(--border);
-  border-radius: 5px;
-  background: var(--light);
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  border-left: 4px solid var(--secondary);
-  z-index: 1000;
-  transition: box-shadow 0.2s ease, z-index 0s;
-  cursor: pointer;
-
-  &:hover {
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-  }
-
-  &.sidenote-active {
-    box-shadow: 0 6px 30px rgba(0, 0, 0, 0.2);
-    transform: translateY(-1px);
-  }
-
-  &.sidenote-l {
-    border-left-color: #3b82f6;
-  }
-
-  &.sidenote-r {
-    border-left-color: #10b981;
-  }
+  padding: 0.75rem 1rem;
+  margin: 1rem 0;
+  border: none;
+  background: transparent;
+  font-size: 0.85rem;
+  color: var(--darkgray);
 
   .sidenote-title {
     display: flex;
     align-items: center;
     gap: 0.5rem;
     margin-bottom: 0.5rem;
-    font-weight: 600;
-    cursor: pointer;
+    font-weight: 500;
+    color: var(--dark);
 
     .sidenote-icon {
-      width: 16px;
-      height: 16px;
+      width: 8px;
+      height: 8px;
       background: var(--secondary);
       border-radius: 50%;
       flex-shrink: 0;
@@ -50,9 +33,9 @@
     }
 
     .sidenote-fold-icon {
-      width: 16px;
-      height: 16px;
-      background: var(--gray);
+      width: 14px;
+      height: 14px;
+      background: var(--lightgray);
       border-radius: 3px;
       position: relative;
       cursor: pointer;
@@ -62,22 +45,22 @@
       &::after {
         content: "";
         position: absolute;
-        background: var(--darkgray);
+        background: var(--gray);
         border-radius: 1px;
       }
 
       &::before {
-        width: 8px;
+        width: 6px;
         height: 2px;
-        top: 7px;
+        top: 6px;
         left: 4px;
       }
 
       &::after {
         width: 2px;
-        height: 8px;
+        height: 6px;
         top: 4px;
-        left: 7px;
+        left: 6px;
         transition: opacity 0.2s ease;
       }
     }
@@ -86,6 +69,7 @@
   .sidenote-content {
     overflow: hidden;
     transition: all 0.3s ease;
+    color: var(--darkgray);
 
     .sidenote-content-inner {
       padding: 0;
@@ -108,59 +92,32 @@
     }
   }
 
-  // Advanced positioning for larger screens with sufficient space
-  @media (min-width: 1400px) {
-    position: fixed;
-    width: 280px;
+  // On wide screens, position sidenotes in right margin
+  @media (min-width: 1100px) {
+    position: absolute;
+    right: -280px;
+    width: 250px;
     margin: 0;
-    z-index: 10000; // Higher z-index to ensure they're clickable above all other elements
-    // Don't set top here - let JavaScript handle positioning
-
-    &.sidenote-l {
-      left: calc(40vw - 600px);
-    }
-
-    &.sidenote-r {
-      right: calc(40vw - 600px);
-    }
-  }
-
-  // Fine-tune for very wide screens
-  @media (min-width: 1800px) {
-    &.sidenote-l {
-      left: calc(40vw - 700px);
-    }
-
-    &.sidenote-r {
-      right: calc(40vw - 700px);
-    }
-  }
-
-  // Dark mode
-  @media (prefers-color-scheme: dark) {
-    background: var(--dark);
-    border-color: var(--darkgray);
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
   }
 }
 
-// Different types of sidenotes
+// Sidenote types using Flexoki colors
 .sidenote.note .sidenote-icon {
-  background: #3b82f6;
+  background: var(--secondary); // Blue
 }
 
 .sidenote.warning .sidenote-icon {
-  background: #f59e0b;
+  background: var(--textHighlight); // Yellow
 }
 
 .sidenote.error .sidenote-icon {
-  background: #ef4444;
+  background: var(--highlight); // Red-ish from highlight
 }
 
 .sidenote.success .sidenote-icon {
-  background: #10b981;
+  background: var(--tertiary); // Cyan
 }
 
 .sidenote.info .sidenote-icon {
-  background: #06b6d4;
+  background: var(--tertiary); // Cyan
 }

@@ -1,38 +1,36 @@
 document.addEventListener("nav", () => {
   const sidenotes = document.querySelectorAll(".sidenote") as NodeListOf<HTMLElement>
 
-  // Position sidenotes to avoid overlapping while keeping them near their content
+  // Position ALL sidenotes on the right side to avoid overlapping
   function positionSidenotes() {
-    if (window.innerWidth < 1400) return
+    if (window.innerWidth < 1100) return
 
-    const leftSidenotes = Array.from(document.querySelectorAll(".sidenote.sidenote-l")) as HTMLElement[]
-    const rightSidenotes = Array.from(document.querySelectorAll(".sidenote.sidenote-r")) as HTMLElement[]
+    // Get ALL sidenotes (both left and right go to the right column now)
+    const allSidenotesForPositioning = Array.from(document.querySelectorAll(".sidenote")) as HTMLElement[]
 
-    // Function to position a group of sidenotes and prevent overlaps
-    function positionGroup(sidenotes: HTMLElement[]) {
-      let lastBottom = 0
+    // First, reset all style.top to get natural flow positions
+    allSidenotesForPositioning.forEach((sidenote) => {
+      sidenote.style.top = ''
+      sidenote.style.transform = ''
+    })
 
-      sidenotes.forEach((sidenote) => {
-        // Get the original position of the sidenote relative to the page
-        const rect = sidenote.getBoundingClientRect()
-        const scrollTop = window.pageYOffset || document.documentElement.scrollTop
-        const originalTop = rect.top + scrollTop
+    let lastBottom = 0
 
-        // Calculate desired position (either original position or after last sidenote)
-        const desiredTop = Math.max(originalTop, lastBottom + 20)
-        
-        sidenote.style.top = `${desiredTop}px`
-        sidenote.style.transform = 'none'
+    allSidenotesForPositioning.forEach((sidenote) => {
+      // Use offsetTop which is relative to the offset parent (correct coordinate system)
+      const originalTop = sidenote.offsetTop
 
-        // Update lastBottom for next sidenote
-        const sidenoteHeight = sidenote.offsetHeight
-        lastBottom = desiredTop + sidenoteHeight
-      })
-    }
+      // Calculate desired position (either original position or after last sidenote)
+      // Both originalTop and lastBottom are now in the same coordinate system (relative to offset parent)
+      const desiredTop = Math.max(originalTop, lastBottom + 16)
+      
+      sidenote.style.top = `${desiredTop}px`
+      sidenote.style.transform = 'none'
 
-    // Position left and right sidenotes independently
-    positionGroup(leftSidenotes)
-    positionGroup(rightSidenotes)
+      // Update lastBottom for next sidenote (relative to offset parent)
+      const sidenoteHeight = sidenote.offsetHeight
+      lastBottom = desiredTop + sidenoteHeight
+    })
   }
 
   positionSidenotes()
@@ -45,11 +43,11 @@ document.addEventListener("nav", () => {
       e.stopPropagation() // Prevent document click handler
       // Reset all sidenotes to default z-index and remove active class
       allSidenotes.forEach(note => {
-        note.style.zIndex = "10000"
+        note.style.zIndex = "100"
         note.classList.remove("sidenote-active")
       })
       // Bring clicked sidenote to front and mark as active
-      sidenote.style.zIndex = "10001"
+      sidenote.style.zIndex = "101"
       sidenote.classList.add("sidenote-active")
     })
   })
@@ -57,7 +55,7 @@ document.addEventListener("nav", () => {
   // Deactivate all sidenotes when clicking elsewhere
   document.addEventListener("click", () => {
     allSidenotes.forEach(note => {
-      note.style.zIndex = "10000"
+      note.style.zIndex = "100"
       note.classList.remove("sidenote-active")
     })
   })
@@ -106,7 +104,7 @@ document.addEventListener("nav", () => {
 
   // Reposition on window resize
   function repositionSidenotes() {
-    if (window.innerWidth >= 1400) {
+    if (window.innerWidth >= 1100) {
       positionSidenotes()
     } else {
       // Reset positioning for smaller screens

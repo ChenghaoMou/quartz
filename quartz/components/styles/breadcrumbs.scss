@@ -1,50 +1,33 @@
 .breadcrumb-container {
   margin: 0;
-  margin-top: 0.75rem;
   padding: 0;
-  font-family: "JetBrains Mono", monospace;
-  font-size: 0.9rem;
-  line-height: 1.2;
-}
-
-.terminal-prompt {
-  display: inline-flex;
+  display: flex;
   align-items: center;
-  
-  .prompt-user {
-    color: var(--secondary);
-    font-weight: bold;
-  }
-  
-  .prompt-separator {
-    color: var(--dark);
-  }
-  
-  .prompt-path {
-    color: var(--tertiary);
-    
-    .path-segment {
-      color: var(--tertiary);
-      text-decoration: none;
-      
-      &:hover {
-        text-decoration: underline;
-      }
-    }
-    
-    span {
-      color: var(--tertiary);
-    }
-  }
-  
-  .prompt-cursor {
-    color: var(--secondary);
-    margin-left: 0.25rem;
-    animation: blink 4s infinite;
-  }
+  flex-wrap: wrap;
+  gap: 0.25rem;
+  font-size: 0.95rem;
 }
 
-@keyframes blink {
-  0%, 70% { opacity: 1; }
-  71%, 100% { opacity: 0; }
+.breadcrumb-separator {
+  color: var(--gray);
+  margin: 0 0.25rem;
+}
+
+.breadcrumb-element {
+  color: var(--gray);
+  text-decoration: none;
+  transition: color 0.15s ease;
+  
+  &:first-child {
+    color: var(--dark);
+    font-weight: 500;
+  }
+  
+  &:hover {
+    color: var(--secondary);
+  }
+  
+  &.current {
+    color: var(--gray);
+  }
 }

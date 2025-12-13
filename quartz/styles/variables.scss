@@ -17,42 +17,46 @@ $tablet: "(min-width: #{map.get($breakpoints, mobile)}) and (max-width: #{map.ge
 $desktop: "(min-width: #{map.get($breakpoints, desktop)})";
 
 $pageWidth: #{map.get($breakpoints, mobile)};
-$sidePanelWidth: 320px; //380px;
-$topSpacing: 6rem;
+$sidePanelWidth: 200px;
+$rightPanelWidth: 280px;
+$topSpacing: 2rem;
 $boldWeight: 700;
 $semiBoldWeight: 600;
 $normalWeight: 400;
 
+// Simplified layout - all rows span full width, centered content
+// Sidebars are positioned as overlays on wide screens
+$contentMaxWidth: 800px;
+
 $mobileGrid: (
-  templateRows: "auto auto auto auto auto",
-  templateColumns: "auto",
-  rowGap: "5px",
-  columnGap: "5px",
+  templateRows: "auto auto auto",
+  templateColumns: "1fr",
+  rowGap: "1rem",
+  columnGap: "0",
   templateAreas:
-    '"grid-sidebar-left"\
-      "grid-header"\
+    '"grid-header"\
       "grid-center"\
-      "grid-sidebar-right"\
       "grid-footer"',
 );
+
 $tabletGrid: (
-  templateRows: "auto auto auto auto",
-  templateColumns: "#{$sidePanelWidth} auto",
-  rowGap: "5px",
-  columnGap: "5px",
+  templateRows: "auto 1fr auto",
+  templateColumns: "1fr",
+  rowGap: "1rem",
+  columnGap: "0",
   templateAreas:
-    '"grid-sidebar-left grid-header"\
-      "grid-sidebar-left grid-center"\
-      "grid-sidebar-left grid-sidebar-right"\
-      "grid-sidebar-left grid-footer"',
+    '"grid-header"\
+      "grid-center"\
+      "grid-footer"',
 );
+
 $desktopGrid: (
-  templateRows: "auto auto auto",
-  templateColumns: "#{$sidePanelWidth} auto #{$sidePanelWidth}",
-  rowGap: "5px",
-  columnGap: "5px",
+  templateRows: "auto 1fr auto",
+  templateColumns: "1fr",
+  rowGap: "1rem",
+  columnGap: "0",
   templateAreas:
-    '"grid-sidebar-left grid-header grid-sidebar-right"\
-      "grid-sidebar-left grid-center grid-sidebar-right"\
-      "grid-sidebar-left grid-footer grid-sidebar-right"',
+    '"grid-header"\
+      "grid-center"\
+      "grid-footer"',
 );

@@ -194,7 +194,7 @@ async function setupSearch(searchElement: Element, currentSlug: FullSlug, data: 
   const sidebar = container.closest(".sidebar") as HTMLElement | null
 
   const searchButton = searchElement.querySelector(".search-button") as HTMLButtonElement
-  if (!searchButton) return
+  // Don't require searchButton - it may be hidden
 
   const searchBar = searchElement.querySelector(".search-bar") as HTMLInputElement
   if (!searchBar) return
@@ -230,7 +230,7 @@ async function setupSearch(searchElement: Element, currentSlug: FullSlug, data: 
     }
     searchLayout.classList.remove("display-results")
     searchType = "basic" // reset search type after closing
-    searchButton.focus()
+    searchButton?.focus()
   }
 
   function showSearch(searchTypeNew: SearchType) {
@@ -242,13 +242,14 @@ async function setupSearch(searchElement: Element, currentSlug: FullSlug, data: 
 
   let currentHover: HTMLInputElement | null = null
   async function shortcutHandler(e: HTMLElementEventMap["keydown"]) {
-    if (e.key === "k" && (e.ctrlKey || e.metaKey) && !e.shiftKey) {
+    // Option/Alt + F for search
+    if (e.key === "f" && e.altKey && !e.shiftKey && !e.ctrlKey && !e.metaKey) {
       e.preventDefault()
       const searchBarOpen = container.classList.contains("active")
       searchBarOpen ? hideSearch() : showSearch("basic")
       return
-    } else if (e.shiftKey && (e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "k") {
-      // Hotkey to open tag search
+    } else if (e.key === "f" && e.altKey && e.shiftKey && !e.ctrlKey && !e.metaKey) {
+      // Option/Alt + Shift + F for tag search
       e.preventDefault()
       const searchBarOpen = container.classList.contains("active")
       searchBarOpen ? hideSearch() : showSearch("tags")
@@ -495,8 +496,10 @@ async function setupSearch(searchElement: Element, currentSlug: FullSlug, data: 
 
   document.addEventListener("keydown", shortcutHandler)
   window.addCleanup(() => document.removeEventListener("keydown", shortcutHandler))
-  searchButton.addEventListener("click", () => showSearch("basic"))
-  window.addCleanup(() => searchButton.removeEventListener("click", () => showSearch("basic")))
+  if (searchButton) {
+    searchButton.addEventListener("click", () => showSearch("basic"))
+    window.addCleanup(() => searchButton.removeEventListener("click", () => showSearch("basic")))
+  }
   searchBar.addEventListener("input", onType)
   window.addCleanup(() => searchBar.removeEventListener("input", onType))
 
@@ -529,6 +532,44 @@ async function fillDocument(data: ContentIndex) {
   await Promise.all(promises)
   indexPopulated = true
 }
+
+// Global keyboard shortcut for Option+F (Alt+F) - attached immediately
+function globalSearchShortcut(e: KeyboardEvent) {
+  // Option/Alt + F for search
+  if (e.key === "f" && e.altKey && !e.shiftKey && !e.ctrlKey && !e.metaKey) {
+    e.preventDefault()
+    e.stopPropagation()
+    const container = document.querySelector(".search-container") as HTMLElement
+    if (container) {
+      const isActive = container.classList.contains("active")
+      if (isActive) {
+        container.classList.remove("active")
+        const searchBar = container.querySelector(".search-bar") as HTMLInputElement
+        if (searchBar) searchBar.value = ""
+      } else {
+        container.classList.add("active")
+        const searchBar = container.querySelector(".search-bar") as HTMLInputElement
+        if (searchBar) searchBar.focus()
+      }
+    }
+  // Option/Alt + Shift + F for tag search
+  } else if (e.key === "f" && e.altKey && e.shiftKey && !e.ctrlKey && !e.metaKey) {
+    e.preventDefault()
+    e.stopPropagation()
+    const container = document.querySelector(".search-container") as HTMLElement
+    if (container) {
+      container.classList.add("active")
+      const searchBar = container.querySelector(".search-bar") as HTMLInputElement
+      if (searchBar) {
+        searchBar.value = "#"
+        searchBar.focus()
+      }
+    }
+  }
+}
+
+// Attach global shortcut immediately
+document.addEventListener("keydown", globalSearchShortcut)
 
 document.addEventListener("nav", async (e: CustomEventMap["nav"]) => {
   const currentSlug = e.detail.url

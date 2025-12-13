@@ -21,24 +21,6 @@ document.addEventListener("nav", () => {
     document.body.classList.add("sidenotes-hidden")
   }
 
-  // Function to update button text
-  const updateButtonText = () => {
-    const isHidden = document.body.classList.contains("sidenotes-hidden")
-    const hideText = toggleButton.querySelector(".hideText")
-    const showText = toggleButton.querySelector(".showText")
-    
-    if (isHidden) {
-      if (hideText) hideText.style.display = "none"
-      if (showText) showText.style.display = "inline"
-    } else {
-      if (hideText) hideText.style.display = "inline"
-      if (showText) showText.style.display = "none"
-    }
-  }
-
-  // Set initial button text
-  updateButtonText()
-
   toggleButton.addEventListener("click", () => {
     const isHidden = document.body.classList.contains("sidenotes-hidden")
     
@@ -51,8 +33,5 @@ document.addEventListener("nav", () => {
       document.body.classList.add("sidenotes-hidden")
       localStorage.setItem("sidenotes-hidden", "true")
     }
-    
-    // Update button text after state change
-    updateButtonText()
   })
 })

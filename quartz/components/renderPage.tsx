@@ -265,29 +265,33 @@ export function renderPage(
       <body data-slug={slug}>
         <div id="quartz-root" class="page">
           <Body {...componentData}>
+            {/* Row 1: Header - spans full width */}
+            <div class="page-header">
+              <Header {...componentData}>
+                {header.map((HeaderComponent) => (
+                  <HeaderComponent {...componentData} />
+                ))}
+              </Header>
+            </div>
+            {/* Row 2: Three columns - Left sidebar | Center content | Right sidebar */}
             {LeftComponent}
             <div class="center">
-              <div class="page-header">
-                <Header {...componentData}>
-                  {header.map((HeaderComponent) => (
-                    <HeaderComponent {...componentData} />
-                  ))}
-                </Header>
-                <div class="popover-hint">
-                  {beforeBody.map((BodyComponent) => (
-                    <BodyComponent {...componentData} />
-                  ))}
-                </div>
-              </div>
-              <Content {...componentData} />
-              <hr />
-              <div class="page-footer">
-                {afterBody.map((BodyComponent) => (
+              <div class="popover-hint">
+                {beforeBody.map((BodyComponent) => (
                   <BodyComponent {...componentData} />
                 ))}
               </div>
+              <Content {...componentData} />
+              {afterBody.length > 0 && (
+                <div class="page-footer">
+                  {afterBody.map((BodyComponent) => (
+                    <BodyComponent {...componentData} />
+                  ))}
+                </div>
+              )}
             </div>
             {RightComponent}
+            {/* Row 3: Footer - spans full width */}
             <Footer {...componentData} />
           </Body>
         </div>
