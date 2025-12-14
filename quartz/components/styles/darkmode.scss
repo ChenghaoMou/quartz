@@ -16,6 +16,7 @@
     height: 20px;
     top: calc(50% - 10px);
     fill: var(--darkgray);
+    stroke: var(--darkgray);
     transition: opacity 0.1s ease;
   }
 }
@@ -28,20 +29,32 @@
   color-scheme: light;
 }
 
-:root[saved-theme="dark"] .darkmode {
-  & > .dayIcon {
+/* Default: hide all icons */
+:root .darkmode {
+  & > .dayIcon,
+  & > .nightIcon,
+  & > .systemIcon {
     display: none;
   }
+}
+
+/* Light mode: show sun icon */
+:root[theme-mode="light"] .darkmode {
+  & > .dayIcon {
+    display: inline;
+  }
+}
+
+/* Dark mode: show moon icon */
+:root[theme-mode="dark"] .darkmode {
   & > .nightIcon {
     display: inline;
   }
 }
 
-:root .darkmode {
-  & > .dayIcon {
+/* System mode: show monitor icon */
+:root[theme-mode="system"] .darkmode {
+  & > .systemIcon {
     display: inline;
-  }
-  & > .nightIcon {
-    display: none;
   }
 }
