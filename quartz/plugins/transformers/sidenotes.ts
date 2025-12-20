@@ -1,5 +1,19 @@
-import { QuartzTransformerPlugin } from "../types"
+/**
+ * Tufte-style Sidenotes Transformer
+ *
+ * Transforms inline markdown syntax into margin sidenotes inspired by Tufte CSS.
+ * Supports three types of sidenotes:
+ *
+ * 1. Numbered sidenotes: ^[content] - displays superscript number inline, numbered content in margin
+ * 2. Highlighted spans: [text]^[content] - highlights text, shows unnumbered content in margin
+ * 3. Margin notes: {> content} - displays ⊕ symbol inline, unnumbered content in margin
+ *
+ * On wide screens (≥1100px), sidenotes float in the right margin.
+ * On narrow screens, sidenotes are hidden until toggled via clicking the reference.
+ */
+
 import { JSResource } from "../../util/resources"
+import { QuartzTransformerPlugin } from "../types"
 // @ts-ignore
 import sidenoteScript from "../../components/scripts/sidenotes.inline"
 
@@ -11,7 +25,17 @@ const defaultOptions: Options = {
   enableSidenotes: true,
 }
 
-const sidenoteBlockRegex = new RegExp(/^> *\[\!([\w-]+)\|aside-(l|r)\]([+-]?)(.*?)(?:\n|$)((?:> .*(?:\n|$))*)/gm)
+const highlightedSidenoteRegex = /\[([^\]]+)\]\^\[([^\]]+)\]/g
+const numberedSidenoteRegex = /(?<!\])\^\[([^\]]+)\]/g
+const marginNoteRegex = /\{>\s*([^}]+)\}/g
+
+interface SidenoteMatch {
+  index: number
+  length: number
+  type: "highlighted" | "numbered" | "margin"
+  text?: string
+  content: string
+}
 
 export const Sidenotes: QuartzTransformerPlugin<Partial<Options>> = (userOpts) => {
   const opts = { ...defaultOptions, ...userOpts }
@@ -23,58 +47,85 @@ export const Sidenotes: QuartzTransformerPlugin<Partial<Options>> = (userOpts) =
         return src
       }
 
-      // Transform sidenote callouts to HTML at text level to avoid conflicts with other plugins
-      return src.replace(sidenoteBlockRegex, (match, typeString, position, collapseChar, titleText, content) => {
-        const isCollapsible = collapseChar === "+" || collapseChar === "-"
-        const defaultState = collapseChar === "-" ? "collapsed" : "expanded"
-        const titleContent = titleText.trim() || typeString.charAt(0).toUpperCase() + typeString.slice(1)
-        
-        // Process the content - remove > prefixes
-        const processedContent = content
-          .split('\n')
-          .map(line => line.replace(/^> ?/, ''))
-          .filter(line => line.trim() !== '')
-          .join('\n')
-        
-        const classNames = ["sidenote", `sidenote-${position}`, typeString.toLowerCase()]
-        if (isCollapsible) {
-          classNames.push("is-collapsible")
+      const matches: SidenoteMatch[] = []
+
+      let match
+      const highlightRegex = new RegExp(highlightedSidenoteRegex.source, "g")
+      while ((match = highlightRegex.exec(src)) !== null) {
+        matches.push({
+          index: match.index,
+          length: match[0].length,
+          type: "highlighted",
+          text: match[1],
+          content: match[2],
+        })
+      }
+
+      const numberedRegex = new RegExp(numberedSidenoteRegex.source, "g")
+      while ((match = numberedRegex.exec(src)) !== null) {
+        const overlaps = matches.some(
+          (m) => match!.index >= m.index && match!.index < m.index + m.length,
+        )
+        if (!overlaps) {
+          matches.push({
+            index: match.index,
+            length: match[0].length,
+            type: "numbered",
+            content: match[1],
+          })
         }
-        if (defaultState === "collapsed") {
-          classNames.push("is-collapsed")
+      }
+
+      const marginRegex = new RegExp(marginNoteRegex.source, "g")
+      while ((match = marginRegex.exec(src)) !== null) {
+        matches.push({
+          index: match.index,
+          length: match[0].length,
+          type: "margin",
+          content: match[1],
+        })
+      }
+
+      matches.sort((a, b) => a.index - b.index)
+
+      let result = src
+      let sidenoteNum = 0
+      let marginNoteNum = 0
+
+      for (let i = matches.length - 1; i >= 0; i--) {
+        const m = matches[i]
+        let replacement: string
+
+        if (m.type === "highlighted") {
+          const id = `hs-${i}`
+          replacement = `<label for="${id}" class="sidenote-highlight">${m.text}</label><input type="checkbox" id="${id}" class="margin-toggle"/><span class="sidenote sidenote-unnumbered">${m.content}</span>`
+        } else if (m.type === "numbered") {
+          sidenoteNum = matches.slice(0, i + 1).filter((x) => x.type === "numbered").length
+          const id = `sn-${sidenoteNum}`
+          replacement = `<label for="${id}" class="margin-toggle sidenote-number" data-sidenote-num="${sidenoteNum}"></label><input type="checkbox" id="${id}" class="margin-toggle"/><span class="sidenote" data-sidenote-num="${sidenoteNum}">${m.content}</span>`
+        } else {
+          marginNoteNum = matches.slice(0, i + 1).filter((x) => x.type === "margin").length
+          const id = `mn-${marginNoteNum}`
+          replacement = `<label for="${id}" class="margin-toggle">&#8853;</label><input type="checkbox" id="${id}" class="margin-toggle"/><span class="marginnote">${m.content}</span>`
         }
 
-        const toggleIcon = isCollapsible ? `<div class="sidenote-fold-icon"></div>` : ""
-        
-        // Use HTML comment markers to prevent further markdown processing
-        const html = `<!-- SIDENOTE_START -->
-<div class="${classNames.join(" ")}" data-sidenote="${typeString}" data-sidenote-position="${position}" data-sidenote-fold="${isCollapsible}">
-  <div class="sidenote-title">
-    <div class="sidenote-icon"></div>
-    <div class="sidenote-title-inner">${titleContent}</div>
-    ${toggleIcon}
-  </div>
-  <div class="sidenote-content">
-    <div class="sidenote-content-inner">
-      ${processedContent}
-    </div>
-  </div>
-</div>
-<!-- SIDENOTE_END -->`
-        
-        return html
-      })
+        result = result.slice(0, m.index) + replacement + result.slice(m.index + m.length)
+      }
+
+      return result
     },
     externalResources() {
       if (!opts.enableSidenotes) {
         return { js: [], css: [] }
       }
 
-      const js: JSResource[] = [{
-        script: sidenoteScript,
-        loadTime: "afterDOMReady",
-        contentType: "inline",
-      }]
+      const js: JSResource[] = [
+        {
+          script: sidenoteScript,
+          loadTime: "afterDOMReady",
+          contentType: "inline",
+        },
+      ]
 
       return { js, css: [] }
     },

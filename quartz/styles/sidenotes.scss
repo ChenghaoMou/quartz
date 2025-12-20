@@ -1,123 +1,136 @@
-// Container for sidenotes - positioned to the right of content
+/**
+ * Tufte CSS-inspired Sidenotes
+ * 
+ * Styles for margin sidenotes that appear on wide screens (≥1100px) and
+ * toggle inline on narrow screens. Based on https://edwardtufte.github.io/tufte-css/
+ * 
+ * Classes:
+ * - .sidenote-number: Superscript reference for numbered sidenotes
+ * - .sidenote-highlight: Highlighted text that references a sidenote
+ * - .sidenote: Sidenote content in margin (numbered or unnumbered)
+ * - .marginnote: Margin note content (uses ⊕ symbol, no numbering)
+ * - .margin-toggle: Hidden checkbox for CSS-only toggle on mobile
+ */
+
 .center {
   position: relative;
 }
 
-// Flexoki-themed sidenotes - positioned in right margin on wide screens
+input.margin-toggle {
+  display: none;
+}
+
+// Superscript number reference
+.sidenote-number {
+  cursor: pointer;
+}
+
+.sidenote-number::after {
+  content: attr(data-sidenote-num);
+  font-size: 0.7rem;
+  top: -0.5rem;
+  position: relative;
+  vertical-align: baseline;
+  color: var(--secondary);
+  font-weight: 500;
+}
+
+// Highlighted span reference
+.sidenote-highlight {
+  background-color: var(--highlight);
+  padding: 0 0.15em;
+  border-radius: 2px;
+  cursor: pointer;
+}
+
+// Sidenote content
 .sidenote {
-  padding: 0.75rem 1rem;
-  margin: 1rem 0;
-  border: none;
-  background: transparent;
   font-size: 0.85rem;
   color: var(--darkgray);
-
-  .sidenote-title {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    margin-bottom: 0.5rem;
-    font-weight: 500;
-    color: var(--dark);
-
-    .sidenote-icon {
-      width: 8px;
-      height: 8px;
-      background: var(--secondary);
-      border-radius: 50%;
-      flex-shrink: 0;
-    }
-
-    .sidenote-title-inner {
-      flex-grow: 1;
-    }
-
-    .sidenote-fold-icon {
-      width: 14px;
-      height: 14px;
-      background: var(--lightgray);
-      border-radius: 3px;
-      position: relative;
-      cursor: pointer;
-      transition: transform 0.2s ease;
-
-      &::before,
-      &::after {
-        content: "";
-        position: absolute;
-        background: var(--gray);
-        border-radius: 1px;
-      }
-
-      &::before {
-        width: 6px;
-        height: 2px;
-        top: 6px;
-        left: 4px;
-      }
-
-      &::after {
-        width: 2px;
-        height: 6px;
-        top: 4px;
-        left: 6px;
-        transition: opacity 0.2s ease;
-      }
-    }
+  line-height: 1.4;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  border-radius: 4px;
+  
+  &.sidenote-active {
+    background-color: var(--highlight);
+    box-shadow: 0 0 0 4px var(--highlight);
+    animation: sidenote-pulse 0.6s ease-out;
   }
+}
 
-  .sidenote-content {
-    overflow: hidden;
-    transition: all 0.3s ease;
-    color: var(--darkgray);
+.sidenote:not(.sidenote-unnumbered)::before {
+  content: attr(data-sidenote-num) ". ";
+  font-weight: 500;
+  color: var(--secondary);
+}
 
-    .sidenote-content-inner {
-      padding: 0;
-      margin: 0;
-    }
+// Margin note content
+.marginnote {
+  font-size: 0.85rem;
+  color: var(--darkgray);
+  line-height: 1.4;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  border-radius: 4px;
+  
+  &.sidenote-active {
+    background-color: var(--highlight);
+    box-shadow: 0 0 0 4px var(--highlight);
+    animation: sidenote-pulse 0.6s ease-out;
   }
+}
 
-  &.is-collapsible.is-collapsed {
-    .sidenote-content {
-      height: 0;
-      opacity: 0;
-    }
+@keyframes sidenote-pulse {
+  0% { box-shadow: 0 0 0 0 var(--highlight); }
+  50% { box-shadow: 0 0 0 8px var(--highlight); }
+  100% { box-shadow: 0 0 0 4px var(--highlight); }
+}
 
-    .sidenote-fold-icon {
-      transform: rotate(90deg);
+// ⊕ symbol for margin notes
+label.margin-toggle:not(.sidenote-number) {
+  cursor: pointer;
+  color: var(--secondary);
+  font-size: 0.85rem;
+}
 
-      &::after {
-        opacity: 0;
-      }
-    }
-  }
-
-  // On wide screens, position sidenotes in right margin
-  @media (min-width: 1100px) {
-    position: absolute;
-    right: -280px;
+// Wide screens: sidenotes float in right margin
+@media (min-width: 1100px) {
+  .sidenote,
+  .marginnote {
+    float: right;
+    clear: right;
+    margin-right: -280px;
     width: 250px;
-    margin: 0;
+    margin-top: 0.25rem;
+    margin-bottom: 1rem;
+    vertical-align: baseline;
+    position: relative;
   }
 }
 
-// Sidenote types using Flexoki colors
-.sidenote.note .sidenote-icon {
-  background: var(--secondary); // Blue
-}
+// Narrow screens: sidenotes hidden, toggle to reveal inline
+@media (max-width: 1099px) {
+  .sidenote,
+  .marginnote {
+    display: none;
+  }
 
-.sidenote.warning .sidenote-icon {
-  background: var(--textHighlight); // Yellow
-}
+  .margin-toggle:checked + .sidenote,
+  .margin-toggle:checked + .marginnote {
+    display: block;
+    float: left;
+    clear: both;
+    width: 95%;
+    margin: 1rem 2.5%;
+    padding: 0.5rem 0.75rem;
+    background: var(--lightgray);
+    border-radius: 4px;
+  }
 
-.sidenote.error .sidenote-icon {
-  background: var(--highlight); // Red-ish from highlight
-}
+  label.margin-toggle:not(.sidenote-number) {
+    display: inline;
+  }
 
-.sidenote.success .sidenote-icon {
-  background: var(--tertiary); // Cyan
-}
-
-.sidenote.info .sidenote-icon {
-  background: var(--tertiary); // Cyan
+  .sidenote-number {
+    padding: 0 0.25rem;
+  }
 }

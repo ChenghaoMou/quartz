@@ -1,4 +1,10 @@
-/* Sidenotes toggle button - icon style matching darkmode toggle */
+/**
+ * Sidenotes Toggle Button
+ * 
+ * Styles for the global sidenotes visibility toggle in the header.
+ * Allows users to hide/show all sidenotes and margin notes on the page.
+ */
+
 .sidenotes-toggle {
   cursor: pointer;
   padding: 0;
@@ -21,7 +27,6 @@
     transition: opacity 0.1s ease;
   }
 
-  /* Default state: sidenotes visible, show the "showIcon" (filled panel) */
   & > .showIcon {
     display: inline;
   }
@@ -30,7 +35,6 @@
   }
 }
 
-/* When sidenotes are hidden, swap icons */
 body.sidenotes-hidden .sidenotes-toggle {
   & > .showIcon {
     display: none;
@@ -40,7 +44,11 @@ body.sidenotes-hidden .sidenotes-toggle {
   }
 }
 
-/* Hide sidenotes when the body has the sidenotes-hidden class */
-body.sidenotes-hidden .sidenote {
+body.sidenotes-hidden .sidenote,
+body.sidenotes-hidden .marginnote {
+  display: none !important;
+}
+
+body.sidenotes-hidden label.margin-toggle {
   display: none !important;
 }
