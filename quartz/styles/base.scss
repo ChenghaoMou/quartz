@@ -171,12 +171,12 @@ a {
       font-size: 2rem;
     }
 
-    & li:has(> input[type="checkbox"]) {
+    & li:has(> input[type="checkbox"]:not(.margin-toggle)) {
       list-style-type: none;
       padding-left: 0;
     }
 
-    & li:has(> input[type="checkbox"]:checked) {
+    & li:has(> input[type="checkbox"]:checked:not(.margin-toggle)) {
       text-decoration: line-through;
       text-decoration-color: var(--gray);
       color: var(--gray);

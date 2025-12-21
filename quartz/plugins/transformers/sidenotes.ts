@@ -25,8 +25,13 @@ const defaultOptions: Options = {
   enableSidenotes: true,
 }
 
-const highlightedSidenoteRegex = /\[([^\]]+)\]\^\[([^\]]+)\]/g
-const numberedSidenoteRegex = /(?<!\])\^\[([^\]]+)\]/g
+// Patterns support one level of nested brackets for markdown links inside sidenotes
+const nestedBracketContent = "(?:[^\\[\\]]|\\[[^\\]]*\\])+"
+const highlightedSidenoteRegex = new RegExp(
+  `\\[(${nestedBracketContent})\\]\\^\\[(${nestedBracketContent})\\]`,
+  "g",
+)
+const numberedSidenoteRegex = new RegExp(`(?<!\\])\\^\\[(${nestedBracketContent})\\]`, "g")
 const marginNoteRegex = /\{>\s*([^}]+)\}/g
 
 interface SidenoteMatch {
@@ -50,8 +55,8 @@ export const Sidenotes: QuartzTransformerPlugin<Partial<Options>> = (userOpts) =
       const matches: SidenoteMatch[] = []
 
       let match
-      const highlightRegex = new RegExp(highlightedSidenoteRegex.source, "g")
-      while ((match = highlightRegex.exec(src)) !== null) {
+      highlightedSidenoteRegex.lastIndex = 0
+      while ((match = highlightedSidenoteRegex.exec(src)) !== null) {
         matches.push({
           index: match.index,
           length: match[0].length,
@@ -61,8 +66,8 @@ export const Sidenotes: QuartzTransformerPlugin<Partial<Options>> = (userOpts) =
         })
       }
 
-      const numberedRegex = new RegExp(numberedSidenoteRegex.source, "g")
-      while ((match = numberedRegex.exec(src)) !== null) {
+      numberedSidenoteRegex.lastIndex = 0
+      while ((match = numberedSidenoteRegex.exec(src)) !== null) {
         const overlaps = matches.some(
           (m) => match!.index >= m.index && match!.index < m.index + m.length,
         )
@@ -76,8 +81,8 @@ export const Sidenotes: QuartzTransformerPlugin<Partial<Options>> = (userOpts) =
         }
       }
 
-      const marginRegex = new RegExp(marginNoteRegex.source, "g")
-      while ((match = marginRegex.exec(src)) !== null) {
+      marginNoteRegex.lastIndex = 0
+      while ((match = marginNoteRegex.exec(src)) !== null) {
         matches.push({
           index: match.index,
           length: match[0].length,
