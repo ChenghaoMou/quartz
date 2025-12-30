@@ -28,6 +28,7 @@ export default {
     themeToggle: {
       lightMode: "Жарық режимі",
       darkMode: "Қараңғы режим",
+      systemMode: "Жүйе режимі",
     },
     readerMode: {
       title: "Оқу режимі",

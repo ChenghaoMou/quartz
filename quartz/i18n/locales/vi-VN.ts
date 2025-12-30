@@ -28,6 +28,7 @@ export default {
     themeToggle: {
       lightMode: "Chế độ sáng",
       darkMode: "Chế độ tối",
+      systemMode: "Chế độ hệ thống",
     },
     readerMode: {
       title: "Chế độ đọc",

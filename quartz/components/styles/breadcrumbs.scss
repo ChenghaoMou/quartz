@@ -17,16 +17,16 @@
   color: var(--gray);
   text-decoration: none;
   transition: color 0.15s ease;
-  
+
   &:first-child {
     color: var(--dark);
     font-weight: 500;
   }
-  
+
   &:hover {
     color: var(--secondary);
   }
-  
+
   &.current {
     color: var(--gray);
   }

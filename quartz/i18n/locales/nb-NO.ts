@@ -28,6 +28,7 @@ export default {
     themeToggle: {
       lightMode: "Lys modus",
       darkMode: "Mørk modus",
+      systemMode: "Systemmodus",
     },
     readerMode: {
       title: "Læsemodus",

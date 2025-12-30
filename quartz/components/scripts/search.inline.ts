@@ -552,7 +552,7 @@ function globalSearchShortcut(e: KeyboardEvent) {
         if (searchBar) searchBar.focus()
       }
     }
-  // Option/Alt + Shift + F for tag search
+    // Option/Alt + Shift + F for tag search
   } else if (e.key === "f" && e.altKey && e.shiftKey && !e.ctrlKey && !e.metaKey) {
     e.preventDefault()
     e.stopPropagation()

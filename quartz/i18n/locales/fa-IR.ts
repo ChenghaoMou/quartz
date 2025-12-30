@@ -29,6 +29,7 @@ export default {
     themeToggle: {
       lightMode: "حالت روشن",
       darkMode: "حالت تاریک",
+      systemMode: "حالت سیستم",
     },
     readerMode: {
       title: "حالت خواندن",

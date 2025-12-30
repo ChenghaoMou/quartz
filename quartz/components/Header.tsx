@@ -2,20 +2,16 @@ import { QuartzComponent, QuartzComponentConstructor, QuartzComponentProps } fro
 
 const Header: QuartzComponent = ({ children }: QuartzComponentProps) => {
   if (children.length === 0) return null
-  
+
   // Split children: first element (Breadcrumbs) goes to nav-left, rest (Search, Darkmode) go to nav-right
   const leftChildren = children.slice(0, 1)
   const rightChildren = children.slice(1)
-  
+
   return (
     <header>
       <div class="header-inner">
-        <nav class="nav-left">
-          {leftChildren}
-        </nav>
-        <nav class="nav-right">
-          {rightChildren}
-        </nav>
+        <nav class="nav-left">{leftChildren}</nav>
+        <nav class="nav-right">{rightChildren}</nav>
       </div>
     </header>
   )

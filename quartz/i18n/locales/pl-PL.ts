@@ -28,6 +28,7 @@ export default {
     themeToggle: {
       lightMode: "Trzyb jasny",
       darkMode: "Tryb ciemny",
+      systemMode: "Tryb systemowy",
     },
     readerMode: {
       title: "Tryb czytania",

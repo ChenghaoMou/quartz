@@ -28,6 +28,7 @@ export default {
     themeToggle: {
       lightMode: "Világos mód",
       darkMode: "Sötét mód",
+      systemMode: "Rendszer mód",
     },
     readerMode: {
       title: "Olvasó mód",

@@ -28,6 +28,7 @@ export default {
     themeToggle: {
       lightMode: "Vaalea tila",
       darkMode: "Tumma tila",
+      systemMode: "Järjestelmän tila",
     },
     readerMode: {
       title: "Lukijatila",

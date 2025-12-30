@@ -29,6 +29,7 @@ export default {
     themeToggle: {
       lightMode: "الوضع النهاري",
       darkMode: "الوضع الليلي",
+      systemMode: "وضع النظام",
     },
     explorer: {
       title: "المستعرض",

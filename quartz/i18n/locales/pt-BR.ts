@@ -28,6 +28,7 @@ export default {
     themeToggle: {
       lightMode: "Tema claro",
       darkMode: "Tema escuro",
+      systemMode: "Tema do sistema",
     },
     readerMode: {
       title: "Modo leitor",

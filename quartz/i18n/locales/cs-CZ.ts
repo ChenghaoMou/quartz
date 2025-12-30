@@ -28,6 +28,7 @@ export default {
     themeToggle: {
       lightMode: "Světlý režim",
       darkMode: "Tmavý režim",
+      systemMode: "Systémový režim",
     },
     readerMode: {
       title: "Režim čtečky",

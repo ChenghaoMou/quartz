@@ -82,7 +82,9 @@ export default ((opts?: Partial<BreadcrumbOptions>) => {
           <>
             {index > 0 && <span class="breadcrumb-separator">{options.spacerSymbol}</span>}
             {crumb.path ? (
-              <a href={crumb.path} class="breadcrumb-element">{crumb.displayName}</a>
+              <a href={crumb.path} class="breadcrumb-element">
+                {crumb.displayName}
+              </a>
             ) : (
               <span class="breadcrumb-element current">{crumb.displayName}</span>
             )}

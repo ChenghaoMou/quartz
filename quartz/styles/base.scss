@@ -218,11 +218,11 @@ a {
       overflow-y: auto;
       width: $sidePanelWidth;
       font-size: 0.85rem;
-      
+
       @media all and (max-width: 1400px) {
         display: none;
       }
-      
+
       /* Hide sidebar if it has no content */
       &:empty {
         display: none;
@@ -231,7 +231,7 @@ a {
 
     & .sidebar.left {
       left: calc((100vw - 800px) / 2 - #{$sidePanelWidth} - 2rem);
-      
+
       &:empty {
         display: none;
       }
@@ -240,7 +240,7 @@ a {
     & .sidebar.right {
       right: calc((100vw - 800px) / 2 - #{$rightPanelWidth} - 2rem);
       width: $rightPanelWidth;
-      
+
       &:empty {
         display: none;
       }
@@ -266,7 +266,7 @@ a {
       padding: 0;
       box-sizing: border-box;
     }
-    
+
     & .center > article,
     & .center > .popover-hint,
     & .center > .page-footer {

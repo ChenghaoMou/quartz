@@ -28,6 +28,7 @@ export default {
     themeToggle: {
       lightMode: "โหมดสว่าง",
       darkMode: "โหมดมืด",
+      systemMode: "โหมดระบบ",
     },
     readerMode: {
       title: "โหมดอ่าน",

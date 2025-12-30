@@ -28,6 +28,7 @@ export default {
     themeToggle: {
       lightMode: "Modul luminos",
       darkMode: "Modul întunecat",
+      systemMode: "Modul sistem",
     },
     readerMode: {
       title: "Modul de citire",

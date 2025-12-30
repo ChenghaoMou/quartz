@@ -29,6 +29,7 @@ export default {
     themeToggle: {
       lightMode: "מצב בהיר",
       darkMode: "מצב כהה",
+      systemMode: "מצב מערכת",
     },
     readerMode: {
       title: "מצב קריאה",

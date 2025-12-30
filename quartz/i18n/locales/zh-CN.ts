@@ -28,6 +28,7 @@ export default {
     themeToggle: {
       lightMode: "亮色模式",
       darkMode: "暗色模式",
+      systemMode: "跟随系统",
     },
     readerMode: {
       title: "阅读模式",

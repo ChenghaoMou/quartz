@@ -28,6 +28,7 @@ export default {
     themeToggle: {
       lightMode: "Açık mod",
       darkMode: "Koyu mod",
+      systemMode: "Sistem modu",
     },
     readerMode: {
       title: "Okuma modu",

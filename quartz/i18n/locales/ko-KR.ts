@@ -28,6 +28,7 @@ export default {
     themeToggle: {
       lightMode: "라이트 모드",
       darkMode: "다크 모드",
+      systemMode: "시스템 모드",
     },
     readerMode: {
       title: "리더 모드",

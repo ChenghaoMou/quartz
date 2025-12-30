@@ -28,6 +28,7 @@ export default {
     themeToggle: {
       lightMode: "Šviesus Režimas",
       darkMode: "Tamsus Režimas",
+      systemMode: "Sistemos Režimas",
     },
     readerMode: {
       title: "Modalità lettore",

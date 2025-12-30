@@ -33,8 +33,7 @@ $mobileGrid: (
   templateColumns: "1fr",
   rowGap: "1rem",
   columnGap: "0",
-  templateAreas:
-    '"grid-header"\
+  templateAreas: '"grid-header"\
       "grid-center"\
       "grid-footer"',
 );
@@ -44,8 +43,7 @@ $tabletGrid: (
   templateColumns: "1fr",
   rowGap: "1rem",
   columnGap: "0",
-  templateAreas:
-    '"grid-header"\
+  templateAreas: '"grid-header"\
       "grid-center"\
       "grid-footer"',
 );
@@ -55,8 +53,7 @@ $desktopGrid: (
   templateColumns: "1fr",
   rowGap: "1rem",
   columnGap: "0",
-  templateAreas:
-    '"grid-header"\
+  templateAreas: '"grid-header"\
       "grid-center"\
       "grid-footer"',
 );

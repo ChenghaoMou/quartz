@@ -54,5 +54,7 @@ document.addEventListener("nav", () => {
   // Listen for changes in prefers-color-scheme (only affects system mode)
   const colorSchemeMediaQuery = window.matchMedia("(prefers-color-scheme: dark)")
   colorSchemeMediaQuery.addEventListener("change", handleSystemThemeChange)
-  window.addCleanup(() => colorSchemeMediaQuery.removeEventListener("change", handleSystemThemeChange))
+  window.addCleanup(() =>
+    colorSchemeMediaQuery.removeEventListener("change", handleSystemThemeChange),
+  )
 })

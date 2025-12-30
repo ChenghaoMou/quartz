@@ -28,6 +28,7 @@ export default {
     themeToggle: {
       lightMode: "Світлий режим",
       darkMode: "Темний режим",
+      systemMode: "Системний режим",
     },
     readerMode: {
       title: "Режим читання",

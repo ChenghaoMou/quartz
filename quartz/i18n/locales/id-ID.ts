@@ -28,6 +28,7 @@ export default {
     themeToggle: {
       lightMode: "Mode Terang",
       darkMode: "Mode Gelap",
+      systemMode: "Mode Sistem",
     },
     readerMode: {
       title: "Mode Pembaca",
