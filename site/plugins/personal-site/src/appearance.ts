@@ -1,7 +1,7 @@
 import { jsx, jsxs } from "preact/jsx-runtime"
-import { formatDate, resolveRelative } from "@quartz-community/utils"
+import type { QuartzComponent, QuartzComponentConstructor } from "@quartz-community/types"
 
-const appearanceScript = String.raw`
+export const appearanceScript = String.raw`
 (() => {
   const key = "appearance"
   const media = window.matchMedia("(prefers-color-scheme: dark)")
@@ -390,14 +390,18 @@ const appearanceScript = String.raw`
 })()
 `
 
-const DitherSigil = () =>
-  jsx("span", {
-    class: "site-sigil",
-    "aria-hidden": "true",
-    children: Array.from({ length: 9 }, (_, index) => jsx("i", {}, index)),
-  })
+type PullMode = "light" | "system" | "dark"
+type PullPlacement = "sidebar" | "compact"
 
-function PullModeSymbol({ mode, transform, moonMaskId }) {
+function PullModeSymbol({
+  mode,
+  transform,
+  moonMaskId,
+}: {
+  mode: PullMode
+  transform: string
+  moonMaskId: string
+}) {
   const children =
     mode === "light"
       ? [
@@ -429,7 +433,7 @@ function PullModeSymbol({ mode, transform, moonMaskId }) {
   })
 }
 
-function PullSwitch({ placement }) {
+export function PullSwitch({ placement }: { placement: PullPlacement }) {
   const sidebar = placement === "sidebar"
   const geometry = sidebar
     ? {
@@ -642,172 +646,8 @@ function PullSwitch({ placement }) {
   })
 }
 
-export const SiteChrome = () => {
-  const Component = ({ fileData }) => {
-    const slug = fileData.slug ?? "index"
-    return jsxs("div", {
-      class: "site-chrome",
-      children: [
-        jsxs("a", {
-          class: "site-brand",
-          href: resolveRelative(slug, "index"),
-          "aria-label": "Sleepless in Debugging, home",
-          "aria-current": slug === "index" ? "page" : undefined,
-          children: [
-            jsx(DitherSigil, {}),
-            jsxs("span", {
-              class: "site-name",
-              children: [
-                jsx("strong", { children: "Sleepless" }),
-                jsx("span", { children: "in Debugging" }),
-              ],
-            }),
-          ],
-        }),
-        jsx("div", {
-          class: "site-switch-mount",
-          children: jsx(PullSwitch, { placement: "sidebar" }),
-        }),
-        jsx(PullSwitch, { placement: "compact" }),
-      ],
-    })
-  }
+export const AppearancePull: QuartzComponentConstructor = () => {
+  const Component: QuartzComponent = () => jsx(PullSwitch, { placement: "sidebar" })
   Component.beforeDOMLoaded = appearanceScript
-  return Component
-}
-
-export const AppearancePull = () => {
-  const Component = () => jsx(PullSwitch, { placement: "sidebar" })
-  Component.beforeDOMLoaded = appearanceScript
-  return Component
-}
-
-export const HomeHero = () => {
-  const Component = ({ fileData }) => {
-    if (fileData.slug !== "index") return null
-    return jsxs("section", {
-      class: "home-intro",
-      "aria-labelledby": "home-title",
-      children: [
-        jsx("h1", { id: "home-title", children: "Home" }),
-        jsx("p", {
-          children:
-            "This is my journey in personal knowledge management—building a Zettelkasten system through lifelong reading and writing.",
-        }),
-        jsxs("p", {
-          class: "home-signature",
-          children: ["✌️", jsx("span", { children: "Chenghao" })],
-        }),
-        jsxs("nav", {
-          class: "home-links",
-          "aria-label": "Explore the site",
-          children: [
-            jsx("a", {
-              href: resolveRelative(fileData.slug, "posts/index"),
-              children: "Writing",
-            }),
-            jsx("a", { href: resolveRelative(fileData.slug, "tags/index"), children: "Topics" }),
-            jsx("a", {
-              href: resolveRelative(fileData.slug, "notes/20251221100853"),
-              children: "Colophon",
-            }),
-            jsx("a", {
-              href: resolveRelative(fileData.slug, "notes/20240218204257"),
-              children: "About me",
-            }),
-          ],
-        }),
-      ],
-    })
-  }
-  return Component
-}
-
-function pageDate(page) {
-  return page.dates?.created ?? page.dates?.modified ?? page.dates?.published
-}
-
-function publicWriting(allFiles) {
-  return allFiles
-    .filter((page) => page.slug !== "index" && !page.slug.endsWith("/index"))
-    .filter((page) => {
-      const type = page.frontmatter?.type
-      return ["essay", "note"].includes(type) || /^(?:posts|notes)\//.test(page.slug)
-    })
-    .filter((page) => page.unlisted !== true)
-}
-
-export const HomeFeed = (options = {}) => {
-  const limit = options.limit ?? 24
-  const Component = ({ allFiles, fileData, cfg }) => {
-    if (fileData.slug !== "index") return null
-    const pages = publicWriting(allFiles)
-      .sort((a, b) => (pageDate(b)?.getTime?.() ?? 0) - (pageDate(a)?.getTime?.() ?? 0))
-      .slice(0, limit)
-    return jsxs("section", {
-      class: "home-feed",
-      "aria-labelledby": "recent-writing",
-      children: [
-        jsx("h2", { id: "recent-writing", children: "Recent writing" }),
-        pages.length === 0
-          ? jsx("p", { class: "empty-feed", children: "The public index is being assembled." })
-          : jsx("ol", {
-              class: "feed-list",
-              children: pages.map((page) => {
-                const fm = page.frontmatter ?? {}
-                const date = pageDate(page)
-                return jsxs(
-                  "li",
-                  {
-                    class: "feed-item",
-                    children: [
-                      jsxs("div", {
-                        class: "feed-line",
-                        children: [
-                          jsx("a", {
-                            class: "internal",
-                            href: resolveRelative(fileData.slug, page.slug),
-                            children: fm.title ?? "Untitled",
-                          }),
-                          date
-                            ? jsx("time", {
-                                dateTime: date.toISOString(),
-                                children: formatDate(date, cfg.locale),
-                              })
-                            : null,
-                        ],
-                      }),
-                      fm.type === "note" && fm.status
-                        ? jsx("span", { class: "feed-status", children: fm.status })
-                        : null,
-                      fm.description
-                        ? jsx("p", { class: "feed-description", children: fm.description })
-                        : null,
-                    ],
-                  },
-                  page.slug,
-                )
-              }),
-            }),
-      ],
-    })
-  }
-  return Component
-}
-
-export const NoteStatus = () => {
-  const Component = ({ fileData }) => {
-    const fm = fileData.frontmatter ?? {}
-    if (fileData.slug === "index" || fm.type !== "note" || !fm.status) return null
-    const copy = {
-      draft: "An early sketch; the edges are still rough.",
-      "in-progress": "A working note that may change as the idea develops.",
-      evergreen: "A maintained note, revisited when the idea evolves.",
-    }[fm.status]
-    return jsxs("aside", {
-      class: "note-status",
-      children: [jsx("span", { children: fm.status }), jsx("p", { children: copy })],
-    })
-  }
   return Component
 }

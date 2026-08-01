@@ -2,7 +2,7 @@
 
 ## Review scope
 
-Reviewed the current Quartz v5 implementation against the design brief and the real source vault at `../blog`. Evidence was captured from the running site at 1280×800, 768×1024, and 375×812 in light mode, plus 1280×800 and 375×812 in dark mode. Baseline captures live in `screenshots/baseline-*.svg`.
+Reviewed the current Quartz v5 implementation against the design brief and the real source vault at `../blog`. Evidence was captured from the running site at 1280×800, 768×1024, and 375×812 in light mode, plus 1280×800 and 375×812 in dark mode. Superseded baseline captures were removed after sign-off; the retained `screenshots/final-*.svg` files document the accepted implementation.
 
 ## Verdict
 

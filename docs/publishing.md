@@ -15,11 +15,14 @@ The following source areas are excluded: `private`, `templates`, `.obsidian`, `4
 
 ## Local preview
 
-Clone or symlink the publishing repository at `content/`, then run:
+Run:
 
 ```sh
 npm run site:dev
 ```
+
+The command uses an existing `content/` checkout when present and otherwise clones the publishing
+repository. It refuses to replace a non-empty or malformed `content/` directory.
 
 For this workspace, the existing checkout can be linked without copying it:
 
@@ -32,11 +35,13 @@ ln -s ../blog content
 Use Node 24 and configure:
 
 ```text
-Build command: git clone --depth 1 https://codeberg.org/Chenghao2023/blog.git content && npm run site:build
+Build command: npm run site:build
 Build output directory: public
 Root directory: /
 Production branch: v5
 ```
 
-`npm run site:build` verifies that both `public/index.html` and `public/404.html` exist. A content
-checkout or filter regression therefore fails the deployment instead of publishing a 404-only site.
+`npm run site:build` checks out content, builds and links the site-local plugins, then verifies that
+both `public/index.html` and `public/404.html` exist. A content checkout, plugin, or filter regression
+therefore fails the deployment instead of publishing a 404-only site. Use `npm run site:verify` in CI
+or before publishing when formatting, types, and tests should run too.

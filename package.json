@@ -20,12 +20,15 @@
     "profile": "0x -D prof ./quartz/bootstrap-cli.mjs build --concurrency=1",
     "install-plugins": "npx tsx ./quartz/plugins/loader/install-plugins.ts",
     "prebuild": "npm run install-plugins",
-    "presite:build": "npm run install-plugins",
+    "content:checkout": "node site/scripts/checkout-content.mjs",
+    "site:plugins:build": "node site/scripts/build-plugins.mjs",
+    "site:prepare": "npm run content:checkout && npm run site:plugins:build && npm run install-plugins",
+    "presite:build": "npm run site:prepare",
     "site:build": "npx quartz build && node site/scripts/verify-build.mjs",
+    "presite:dev": "npm run site:prepare",
     "site:dev": "npx quartz build --serve",
-    "site:test": "node --test site/tests/*.test.mjs",
-    "site:check": "npm run check && npm test && npm run site:test",
-    "prepare:publish": "npm run site:check && npm run site:build"
+    "site:check": "npm run site:plugins:build && npm run install-plugins && npm run check && npm test",
+    "site:verify": "npm run site:build && npm run check && npm test"
   },
   "engines": {
     "npm": ">=10.9.2",

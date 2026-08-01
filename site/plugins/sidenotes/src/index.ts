@@ -1,14 +1,18 @@
 import crypto from "node:crypto"
+import type { QuartzTransformerPlugin } from "@quartz-community/types"
 
-function escapeHtml(value) {
-  return value.replace(
-    /[&<>"']/g,
-    (character) =>
-      ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[character],
-  )
+function escapeHtml(value: string) {
+  const entities: Record<string, string> = {
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#39;",
+  }
+  return value.replace(/[&<>"']/g, (character) => entities[character] ?? character)
 }
 
-function inlineMarkdown(value) {
+function inlineMarkdown(value: string) {
   const escaped = escapeHtml(value)
   return escaped
     .replace(/`([^`]+)`/g, "<code>$1</code>")
@@ -17,7 +21,13 @@ function inlineMarkdown(value) {
     .replace(/\*([^*]+)\*/g, "<em>$1</em>")
 }
 
-function render(kind, anchor, note, id, number) {
+function render(
+  kind: "margin" | "numbered",
+  anchor: string,
+  note: string,
+  id: string,
+  number: number,
+) {
   const marker = kind === "margin" ? "✦" : String(number)
   const label = kind === "margin" ? "Open margin note" : `Open sidenote ${number}`
   const className = `sidenote sidenote-${kind}`
@@ -26,7 +36,7 @@ function render(kind, anchor, note, id, number) {
   return `${anchor ? `<span class="sidenote-anchor">${inlineMarkdown(anchor)}</span>` : ""}${reference}${aside}`
 }
 
-export const Sidenotes = () => ({
+export const Sidenotes: QuartzTransformerPlugin = () => ({
   name: "Sidenotes",
   textTransform(_ctx, source) {
     const prefix = crypto.createHash("sha1").update(source).digest("hex").slice(0, 7)

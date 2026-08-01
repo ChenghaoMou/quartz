@@ -16,9 +16,7 @@ git switch v5
 git switch -c chore/quartz-upstream-YYYY-MM-DD
 git merge --no-ff upstream/v5
 npm ci
-npm run install-plugins
-npm run site:check
-npm run site:build
+npm run site:verify
 ```
 
 Resolve upstream changes in core files in favour of upstream unless the personal site has a documented reason to differ. Pay special attention to the config loader, component layout API, client navigation lifecycle, and plugin lock format. Then inspect the homepage and one article in desktop/mobile and light/dark modes before merging.
