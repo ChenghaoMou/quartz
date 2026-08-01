@@ -1,0 +1,47 @@
+{
+  "version": "1.0.0",
+  "plugins": {
+    "HomeFeed": {
+      "source": {
+        "repo": "./site/plugins/personal-site",
+        "name": "HomeFeed"
+      },
+      "resolved": "./site/plugins/personal-site",
+      "commit": "local",
+      "installedAt": "2026-08-01T13:31:41.878Z"
+    },
+    "HomeHero": {
+      "source": {
+        "repo": "./site/plugins/personal-site",
+        "name": "HomeHero"
+      },
+      "resolved": "./site/plugins/personal-site",
+      "commit": "local",
+      "installedAt": "2026-08-01T13:31:41.878Z"
+    },
+    "NoteStatus": {
+      "source": {
+        "repo": "./site/plugins/personal-site",
+        "name": "NoteStatus"
+      },
+      "resolved": "./site/plugins/personal-site",
+      "commit": "local",
+      "installedAt": "2026-08-01T13:31:41.878Z"
+    },
+    "SiteChrome": {
+      "source": {
+        "repo": "./site/plugins/personal-site",
+        "name": "SiteChrome"
+      },
+      "resolved": "./site/plugins/personal-site",
+      "commit": "local",
+      "installedAt": "2026-08-01T13:31:41.878Z"
+    },
+    "sidenotes": {
+      "source": "./site/plugins/sidenotes",
+      "resolved": "./site/plugins/sidenotes",
+      "commit": "local",
+      "installedAt": "2026-08-01T13:31:41.876Z"
+    }
+  }
+}

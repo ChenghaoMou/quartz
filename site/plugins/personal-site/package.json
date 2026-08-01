@@ -1,0 +1,57 @@
+{
+  "name": "@sleepless/personal-site",
+  "version": "1.0.0",
+  "type": "module",
+  "private": true,
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./components": {
+      "types": "./dist/components/index.d.ts",
+      "import": "./dist/components/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "peerDependencies": {
+    "@quartz-community/types": ">=0.3.0",
+    "@quartz-community/utils": ">=0.1.0",
+    "preact": ">=10.0.0"
+  },
+  "quartz": {
+    "name": "personal-site",
+    "displayName": "Sleepless Personal Site",
+    "description": "Site-local navigation, homepage feed, geometry, and note maturity components.",
+    "category": "component",
+    "version": "1.0.0",
+    "quartzVersion": ">=5.0.0",
+    "dependencies": [],
+    "defaultOrder": 100,
+    "defaultEnabled": true,
+    "components": {
+      "SiteChrome": {
+        "displayName": "Site Chrome",
+        "defaultPosition": "header",
+        "defaultPriority": 10
+      },
+      "HomeHero": {
+        "displayName": "Home Hero",
+        "defaultPosition": "beforeBody",
+        "defaultPriority": 1
+      },
+      "HomeFeed": {
+        "displayName": "Home Feed",
+        "defaultPosition": "beforeBody",
+        "defaultPriority": 40
+      },
+      "NoteStatus": {
+        "displayName": "Note Status",
+        "defaultPosition": "beforeBody",
+        "defaultPriority": 25
+      }
+    }
+  }
+}

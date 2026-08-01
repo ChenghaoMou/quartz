@@ -10,5 +10,8 @@ private/
 .replit
 replit.nix
 .quartz/
+.idea/
+.site.local.*
+.quartz-cache/
 quartz/cli/tui/dist/
 .turbo/

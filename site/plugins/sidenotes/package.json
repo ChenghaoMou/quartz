@@ -1,0 +1,27 @@
+{
+  "name": "@sleepless/sidenotes",
+  "version": "1.0.0",
+  "type": "module",
+  "private": true,
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "quartz": {
+    "name": "sidenotes",
+    "displayName": "Sidenotes",
+    "description": "Accessible Tufte-style sidenotes for trusted Markdown content.",
+    "category": "transformer",
+    "version": "1.0.0",
+    "quartzVersion": ">=5.0.0",
+    "dependencies": [],
+    "defaultOrder": 25,
+    "defaultEnabled": true,
+    "defaultOptions": {}
+  }
+}

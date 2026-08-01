@@ -1,0 +1,35 @@
+name: Quartz upstream drift
+
+on:
+  schedule:
+    - cron: "23 8 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  compare:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - name: Compare with Quartz v5
+        shell: bash
+        run: |
+          git remote add quartz-upstream https://github.com/jackyzha0/quartz.git
+          git fetch --no-tags quartz-upstream v5
+          ahead=$(git rev-list --count quartz-upstream/v5..HEAD)
+          behind=$(git rev-list --count HEAD..quartz-upstream/v5)
+          {
+            echo "## Quartz upstream drift"
+            echo
+            echo "- Personal branch commits: ${ahead}"
+            echo "- New upstream commits: ${behind}"
+            echo
+            echo "Review [docs/upstream-sync.md](../../blob/v5/docs/upstream-sync.md) before integrating upstream changes."
+          } >> "$GITHUB_STEP_SUMMARY"
+          if [ "$behind" -gt 0 ]; then
+            echo "Quartz v5 has ${behind} new commit(s)."
+          fi

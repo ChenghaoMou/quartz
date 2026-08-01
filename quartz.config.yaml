@@ -1,0 +1,198 @@
+# yaml-language-server: $schema=./quartz/plugins/quartz-plugins.schema.json
+configuration:
+  pageTitle: Sleepless in Debugging
+  pageTitleSuffix: ""
+  enableSPA: true
+  enablePopovers: true
+  analytics: null
+  locale: en-GB
+  baseUrl: sleeplessindebugging.blog
+  ignorePatterns:
+    - private
+    - templates
+    - .obsidian
+  theme:
+    fontOrigin: googleFonts
+    cdnCaching: true
+    typography:
+      header: IBM Plex Sans
+      body: Source Serif 4
+      code: IBM Plex Mono
+    colors:
+      lightMode:
+        light: "#fffcf0"
+        lightgray: "#e6e4d9"
+        gray: "#b7b5ac"
+        darkgray: "#403e3c"
+        dark: "#100f0f"
+        secondary: "#205ea6"
+        tertiary: "#bc5215"
+        highlight: "rgba(218, 112, 44, 0.14)"
+        textHighlight: "rgba(236, 190, 56, 0.38)"
+      darkMode:
+        light: "#100f0f"
+        lightgray: "#282726"
+        gray: "#575653"
+        darkgray: "#cecdc3"
+        dark: "#fffcf0"
+        secondary: "#8b7ec8"
+        tertiary: "#da702c"
+        highlight: "rgba(139, 126, 200, 0.18)"
+        textHighlight: "rgba(173, 131, 1, 0.42)"
+plugins:
+  - source: "@quartz-community/note-properties"
+    enabled: true
+    options:
+      includeAll: true
+      hidePropertiesView: true
+    order: 5
+  - source: "@quartz-community/created-modified-date"
+    enabled: true
+    options:
+      defaultDateType: published
+      priority: [frontmatter, git, filesystem]
+    order: 10
+  - source: "@quartz-community/syntax-highlighting"
+    enabled: true
+    options:
+      theme: { light: github-light, dark: github-dark }
+      keepBackground: false
+    order: 20
+  - source: "./site/plugins/sidenotes"
+    enabled: true
+    order: 25
+  - source: "@quartz-community/obsidian-flavored-markdown"
+    enabled: true
+    options: { enableInHtmlEmbed: false, enableCheckbox: true }
+    order: 30
+  - source: "@quartz-community/github-flavored-markdown"
+    enabled: true
+    order: 40
+  - source: "@quartz-community/table-of-contents"
+    enabled: true
+    order: 50
+    layout:
+      position: right
+      priority: 30
+      condition: not-index
+  - source: "@quartz-community/crawl-links"
+    enabled: true
+    options: { markdownLinkResolution: shortest }
+    order: 60
+  - source: "@quartz-community/description"
+    enabled: true
+    order: 70
+  - source: "@quartz-community/latex"
+    enabled: true
+    options: { renderEngine: katex }
+    order: 80
+  - source: "@quartz-community/quartz-fonts"
+    enabled: true
+    options: { useThemeFonts: true, fontOrigin: googleFonts }
+  - source: "@quartz-community/remove-draft"
+    enabled: false
+  - source: "@quartz-community/explicit-publish"
+    enabled: true
+  - source: "@quartz-community/alias-redirects"
+    enabled: true
+  - source: "@quartz-community/content-index"
+    enabled: true
+    options: { enableSiteMap: true, enableRSS: true }
+  - source: "@quartz-community/favicon"
+    enabled: true
+  - source: "@quartz-community/og-image"
+    enabled: true
+  - source: "@quartz-community/cname"
+    enabled: true
+  - source: "@quartz-community/content-page"
+    enabled: true
+  - source: "@quartz-community/folder-page"
+    enabled: true
+  - source: "@quartz-community/tag-page"
+    enabled: true
+  - source: "@quartz-community/search"
+    enabled: true
+    layout:
+      position: header
+      priority: 20
+  - source: "@quartz-community/backlinks"
+    enabled: true
+    layout:
+      position: afterBody
+      priority: 50
+      condition: not-index
+  - source: "@quartz-community/article-title"
+    enabled: true
+    layout:
+      position: beforeBody
+      priority: 10
+      condition: not-index
+  - source: "@quartz-community/content-meta"
+    enabled: true
+    layout:
+      position: beforeBody
+      priority: 20
+      condition: not-index
+  - source: "@quartz-community/tag-list"
+    enabled: true
+    layout:
+      position: beforeBody
+      priority: 30
+      condition: not-index
+  - source: "@quartz-community/breadcrumbs"
+    enabled: true
+    layout:
+      position: beforeBody
+      priority: 5
+      condition: not-index
+  - source: "@quartz-community/footer"
+    enabled: true
+    options:
+      links:
+        GitHub: https://github.com/chenghaomou
+        RSS: https://sleeplessindebugging.blog/index.xml
+    layout:
+      position: footer
+      priority: 50
+  - source:
+      repo: "./site/plugins/personal-site"
+      name: SiteChrome
+    enabled: true
+    order: 100
+    layout:
+      position: header
+      priority: 10
+  - source:
+      repo: "./site/plugins/personal-site"
+      name: HomeHero
+    enabled: true
+    order: 100
+    layout:
+      position: beforeBody
+      priority: 1
+  - source:
+      repo: "./site/plugins/personal-site"
+      name: NoteStatus
+    enabled: true
+    order: 100
+    layout:
+      position: beforeBody
+      priority: 25
+  - source:
+      repo: "./site/plugins/personal-site"
+      name: HomeFeed
+    enabled: true
+    order: 100
+    options: { limit: 24 }
+    layout:
+      position: beforeBody
+      priority: 40
+layout:
+  byPageType:
+    "404":
+      positions: { beforeBody: [], left: [], right: [] }
+    content: {}
+    folder:
+      positions: { right: [] }
+    tag:
+      positions: { right: [] }
