@@ -6,6 +6,7 @@ import test from "node:test"
 import vm from "node:vm"
 import { render } from "preact-render-to-string"
 import YAML from "yaml"
+import { DeduplicateTitle } from "../plugins/deduplicate-title/dist/index.js"
 import { HomeFeed, NoteStatus } from "../plugins/personal-site/dist/components/index.js"
 import { AliasRedirects } from "../plugins/safe-alias-redirects/dist/index.js"
 import { Sidenotes } from "../plugins/sidenotes/dist/index.js"
@@ -15,6 +16,83 @@ const baseProps = {
   fileData: { slug: "index", frontmatter: {} },
   allFiles: [],
 }
+
+function transformRenderedTitle(tree, title) {
+  const transformer = DeduplicateTitle().htmlPlugins({})[0]()
+  transformer(tree, { data: { frontmatter: { title } } })
+}
+
+test("matching frontmatter and leading Markdown titles render only once", () => {
+  const tree = {
+    type: "root",
+    children: [
+      { type: "text", value: "\n" },
+      {
+        type: "element",
+        tagName: "h1",
+        properties: {},
+        children: [
+          { type: "text", value: "Colophon " },
+          {
+            type: "element",
+            tagName: "em",
+            properties: {},
+            children: [{ type: "text", value: "notes" }],
+          },
+        ],
+      },
+      {
+        type: "element",
+        tagName: "p",
+        properties: {},
+        children: [{ type: "text", value: "The body remains." }],
+      },
+    ],
+  }
+
+  transformRenderedTitle(tree, "Colophon notes")
+
+  assert.deepEqual(
+    tree.children.filter((child) => child.type === "element").map((child) => child.tagName),
+    ["p"],
+  )
+})
+
+test("distinct or non-leading Markdown headings remain in the rendered note", () => {
+  const distinct = {
+    type: "root",
+    children: [
+      {
+        type: "element",
+        tagName: "h1",
+        properties: {},
+        children: [{ type: "text", value: "How this site works" }],
+      },
+    ],
+  }
+  transformRenderedTitle(distinct, "Colophon")
+  assert.equal(distinct.children[0].tagName, "h1")
+
+  const nonLeading = {
+    type: "root",
+    children: [
+      {
+        type: "element",
+        tagName: "p",
+        properties: {},
+        children: [{ type: "text", value: "Introduction" }],
+      },
+      {
+        type: "element",
+        tagName: "h1",
+        properties: {},
+        children: [{ type: "text", value: "Colophon" }],
+      },
+    ],
+  }
+  transformRenderedTitle(nonLeading, "Colophon")
+  assert.equal(nonLeading.children[1].tagName, "h1")
+})
 
 test("publishing policy keeps the external repository's private folders out of the build", async () => {
   const config = YAML.parse(await fs.readFile("quartz.config.yaml", "utf8"))

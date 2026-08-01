@@ -1,0 +1,27 @@
+{
+  "name": "@sleepless/deduplicate-title",
+  "version": "1.0.0",
+  "type": "module",
+  "private": true,
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "quartz": {
+    "name": "deduplicate-title",
+    "displayName": "Deduplicate Title",
+    "description": "Suppresses a leading Markdown heading when Quartz already renders the same frontmatter title.",
+    "category": "transformer",
+    "version": "1.0.0",
+    "quartzVersion": ">=5.0.0",
+    "dependencies": [],
+    "defaultOrder": 75,
+    "defaultEnabled": true,
+    "defaultOptions": {}
+  }
+}

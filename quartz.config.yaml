@@ -89,6 +89,9 @@ plugins:
   - source: "@quartz-community/description"
     enabled: true
     order: 70
+  - source: "./site/plugins/deduplicate-title"
+    enabled: true
+    order: 75
   - source: "@quartz-community/latex"
     enabled: true
     options: { renderEngine: katex }
