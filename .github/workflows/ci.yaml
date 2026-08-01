@@ -23,10 +23,10 @@ jobs:
           cache: npm
 
       - run: npm ci
+      - name: Check out published content
+        run: git clone --depth 1 https://codeberg.org/Chenghao2023/blog.git content
       - name: Link site-local Quartz plugins
         run: npm run install-plugins
-      - name: Verify curated public content
-        run: npm run content:check
       - name: Typecheck, format, and test
         run: npm run site:check
       - name: Build production site

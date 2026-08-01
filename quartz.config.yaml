@@ -11,6 +11,13 @@ configuration:
     - private
     - templates
     - .obsidian
+    - 4archives
+    - journal
+    - public
+    - boilerplates
+    - inbox
+    - highlights/Archive
+    - "**/__order__.md"
   theme:
     fontOrigin: local
     cdnCaching: false
@@ -49,7 +56,7 @@ plugins:
   - source: "@quartz-community/created-modified-date"
     enabled: true
     options:
-      defaultDateType: published
+      defaultDateType: created
       priority: [frontmatter, git, filesystem]
     order: 10
   - source: "@quartz-community/syntax-highlighting"
@@ -90,9 +97,11 @@ plugins:
     enabled: false
     options: { useThemeFonts: true, fontOrigin: local }
   - source: "@quartz-community/remove-draft"
-    enabled: false
-  - source: "@quartz-community/explicit-publish"
     enabled: true
+  - source: "@quartz-community/explicit-publish"
+    # Publication is controlled by the folder policy above. The external
+    # repository's existing notes predate per-file `publish: true` flags.
+    enabled: false
   - source: "./site/plugins/safe-alias-redirects"
     enabled: true
   - source: "@quartz-community/content-index"

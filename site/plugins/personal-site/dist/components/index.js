@@ -703,12 +703,18 @@ export const HomeHero = () => {
           "aria-label": "Explore the site",
           children: [
             jsx("a", {
-              href: resolveRelative(fileData.slug, "writing/index"),
+              href: resolveRelative(fileData.slug, "posts/index"),
               children: "Writing",
             }),
             jsx("a", { href: resolveRelative(fileData.slug, "tags/index"), children: "Topics" }),
-            jsx("a", { href: resolveRelative(fileData.slug, "colophon"), children: "Colophon" }),
-            jsx("a", { href: resolveRelative(fileData.slug, "about"), children: "About me" }),
+            jsx("a", {
+              href: resolveRelative(fileData.slug, "notes/20251221100853"),
+              children: "Colophon",
+            }),
+            jsx("a", {
+              href: resolveRelative(fileData.slug, "notes/20240218204257"),
+              children: "About me",
+            }),
           ],
         }),
       ],
@@ -718,13 +724,17 @@ export const HomeHero = () => {
 }
 
 function pageDate(page) {
-  return page.dates?.published ?? page.dates?.created ?? page.dates?.modified
+  return page.dates?.created ?? page.dates?.modified ?? page.dates?.published
 }
 
 function publicWriting(allFiles) {
   return allFiles
-    .filter((page) => ["essay", "note"].includes(page.frontmatter?.type))
-    .filter((page) => page.frontmatter?.publish === true && page.unlisted !== true)
+    .filter((page) => page.slug !== "index" && !page.slug.endsWith("/index"))
+    .filter((page) => {
+      const type = page.frontmatter?.type
+      return ["essay", "note"].includes(type) || /^(?:posts|notes)\//.test(page.slug)
+    })
+    .filter((page) => page.unlisted !== true)
 }
 
 export const HomeFeed = (options = {}) => {

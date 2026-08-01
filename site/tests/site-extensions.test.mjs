@@ -5,6 +5,7 @@ import path from "node:path"
 import test from "node:test"
 import vm from "node:vm"
 import { render } from "preact-render-to-string"
+import YAML from "yaml"
 import { HomeFeed, NoteStatus } from "../plugins/personal-site/dist/components/index.js"
 import { AliasRedirects } from "../plugins/safe-alias-redirects/dist/index.js"
 import { Sidenotes } from "../plugins/sidenotes/dist/index.js"
@@ -15,29 +16,54 @@ const baseProps = {
   allFiles: [],
 }
 
-test("home feed includes public essays and notes but not pages", () => {
+test("publishing policy keeps the external repository's private folders out of the build", async () => {
+  const config = YAML.parse(await fs.readFile("quartz.config.yaml", "utf8"))
+  const ignored = new Set(config.configuration.ignorePatterns)
+  for (const pattern of [
+    "private",
+    "templates",
+    ".obsidian",
+    "4archives",
+    "journal",
+    "public",
+    "boilerplates",
+    "inbox",
+    "highlights/Archive",
+    "**/__order__.md",
+  ]) {
+    assert.equal(ignored.has(pattern), true, `missing ignored content pattern: ${pattern}`)
+  }
+
+  const plugin = (source) => config.plugins.find((candidate) => candidate.source === source)
+  assert.equal(plugin("@quartz-community/remove-draft").enabled, true)
+  assert.equal(plugin("@quartz-community/explicit-publish").enabled, false)
+})
+
+test("home feed includes writing from the external repository without publish flags", () => {
   const Feed = HomeFeed()
   const html = render(
     Feed({
       ...baseProps,
       allFiles: [
         {
-          slug: "public-note",
-          dates: { published: new Date("2026-07-01") },
+          slug: "notes/public-note",
+          dates: {
+            created: new Date("2020-07-01"),
+            published: new Date("2026-07-01"),
+          },
           frontmatter: {
-            publish: true,
-            type: "note",
-            status: "in-progress",
             title: "Public note",
             description: "A thought in motion.",
           },
         },
+        { slug: "posts/index", frontmatter: { title: "Posts" } },
         { slug: "about", frontmatter: { publish: true, type: "page", title: "About" } },
       ],
     }),
   )
   assert.match(html, /Public note/)
-  assert.match(html, /in-progress/)
+  assert.match(html, /01 Jul 2020/)
+  assert.doesNotMatch(html, />Posts</)
   assert.doesNotMatch(html, />About</)
 })
 

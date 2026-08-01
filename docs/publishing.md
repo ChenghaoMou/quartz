@@ -1,38 +1,42 @@
-# Publishing from Obsidian
+# Publishing from the content repository
 
-The private vault is never deployed. The repository contains only the curated output in `content/`.
+The Quartz framework and the writing are deliberately separate:
 
-The current repository also has a temporary, exact path-by-path legacy map in `site/publish.config.mjs`. It imports material that was already public in the old blog and supplies the newer public metadata contract during migration. It does not publish directories wholesale; new writing should use `publish: true`.
+- `ChenghaoMou/quartz` contains the renderer, design, and build contract.
+- `codeberg.org/Chenghao2023/blog` is the publishing repository and supplies `content/`.
 
-## Mark a piece public
+The framework ignores `content/`; never commit a copy of the writing here. Existing notes do not
+need duplicated `publish: true` flags. Publication is instead constrained by
+`configuration.ignorePatterns` in `quartz.config.yaml`, which preserves the framework repository's
+folder-level policy.
 
-Add frontmatter like:
+The following source areas are excluded: `private`, `templates`, `.obsidian`, `4archives`, `journal`,
+`public`, `boilerplates`, `inbox`, `highlights/Archive`, and every `__order__.md` file.
 
-```yaml
-publish: true
-title: A useful title
-description: One sentence used in feeds and search.
-published: 2026-08-01
-type: note
-status: in-progress
-tags:
-  - systems
-```
+## Local preview
 
-Use `type: essay` for a finished long-form piece; essays do not require `status`. A public piece may only link to other public pieces. Referenced images and PDFs are copied automatically.
-
-## Export and preview
+Clone or symlink the publishing repository at `content/`, then run:
 
 ```sh
-OBSIDIAN_VAULT=/absolute/path/to/vault npm run content:export
-npm run site:check
 npm run site:dev
 ```
 
-The first command atomically replaces `content/` and updates `site/content-manifest.json`. Commit both together. `npm run content:check` fails if the public files and manifest diverge.
+For this workspace, the existing checkout can be linked without copying it:
 
-For a persistent local path, create the ignored symlink `.site.local.vault` pointing to the vault instead of setting `OBSIDIAN_VAULT` each time.
+```sh
+ln -s ../blog content
+```
 
-## Deploy
+## Cloudflare Pages
 
-Cloudflare Pages should use Node 24, `npm run site:build` as the build command, and `public` as the output directory. The committed public export is the deploy input; Cloudflare does not need access to the private vault.
+Use Node 24 and configure:
+
+```text
+Build command: git clone --depth 1 https://codeberg.org/Chenghao2023/blog.git content && npm run site:build
+Build output directory: public
+Root directory: /
+Production branch: v5
+```
+
+`npm run site:build` verifies that both `public/index.html` and `public/404.html` exist. A content
+checkout or filter regression therefore fails the deployment instead of publishing a 404-only site.
