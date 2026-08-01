@@ -6,20 +6,20 @@ Build a durable personal writing garden for Chenghao: useful first to a future s
 
 ## Experience
 
-The homepage is a chronological editorial front page. Essays and notes live in one feed, distinguished by a compact type label; notes also show one plain maturity state: `draft`, `in-progress`, or `evergreen`. Search, topics, and backlinks support quiet discovery. Graphs, explorers, analytics, comments, thumbnails, and engagement mechanics stay out of the primary experience.
+The homepage is a quiet personal index: a short introduction, direct links into the garden, and a plain reverse-chronological writing list. Essays and notes live in one feed; notes may show one small maturity state: `draft`, `in-progress`, or `evergreen`. Search, topics, a table of contents, and backlinks support quiet discovery. Graphs, explorers, analytics, comments, thumbnails, and engagement mechanics stay out of the primary experience.
 
-The visual philosophy is **dithered editorial modernism**: warm Flexoki paper and ink, a serif reading voice, a restrained grotesk interface voice, fine rules, asymmetry, and deterministic geometric forms. The homepage carries the strongest composition. Section pages may use faint fragments of the motif; article pages stay quiet. Dithering is texture, not decoration everywhere.
+The visual philosophy is **Flexoki quiet utility**, restored from the original site: warm paper and ink, native system typography, modest type sizes, a narrow reading column, useful side rails, plain links, and generous but unshowy spacing. The nine-dot dither logo beside the site name is the single geometric signature. Minimalism here means careful hierarchy and comfortable reading, not an ornamental editorial composition.
 
 ## Structure
 
-- Global: compact S/D mark, Writing, Topics, About, search, and a persisted System/Light/Dark appearance control.
-- Home: manifesto-scale title, ambient geometric/dither field, then a single reverse-chronological feed.
-- Article/note: title, date and reading metadata, tags, note maturity when applicable, body, sidenotes, then backlinks.
+- Global: nine-dot dither mark beside the site name, Writing, Topics, About, search, and a persisted System/Light/Dark appearance control.
+- Home: original introduction and signature, direct section links, then a restrained reverse-chronological feed.
+- Article/note: modest title, date and reading metadata, tags, note maturity when applicable, body, left-side contents, sidenotes, then backlinks.
 - Discovery: tag index, search, RSS, sitemap, and contextual backlinks.
 
 ## Content contract
 
-The Obsidian vault is private. A deterministic export selects only Markdown with `publish: true`, validates public metadata and links, copies referenced assets, strips non-public frontmatter, and replaces `content/` atomically. `content/` plus `site/content-manifest.json` are the auditable public artifact.
+The active Obsidian vault is private. A deterministic export selects only Markdown with `publish: true`, validates public metadata and links, copies referenced assets, strips non-public frontmatter, and replaces `content/` atomically. During migration, an explicit path-by-path legacy-public map may import material from the existing public blog repository and supply missing public metadata; it must never operate as a directory-wide implicit allowlist. `content/` plus `site/content-manifest.json` are the auditable public artifact.
 
 Public pieces use:
 

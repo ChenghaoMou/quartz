@@ -1,0 +1,32 @@
+{
+  "name": "@sleepless/safe-alias-redirects",
+  "version": "1.0.0",
+  "type": "module",
+  "private": true,
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "peerDependencies": {
+    "@quartz-community/alias-redirects": ">=0.1.0",
+    "@quartz-community/utils": ">=0.1.0"
+  },
+  "quartz": {
+    "name": "safe-alias-redirects",
+    "displayName": "Safe Alias Redirects",
+    "description": "Prevents aliases from overwriting canonical Quartz pages before delegating to the upstream redirect emitter.",
+    "category": "emitter",
+    "version": "1.0.0",
+    "quartzVersion": ">=5.0.0",
+    "dependencies": [],
+    "defaultEnabled": true,
+    "defaultOptions": {
+      "enableCaseRedirects": true
+    }
+  }
+}

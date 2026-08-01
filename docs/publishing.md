@@ -2,6 +2,8 @@
 
 The private vault is never deployed. The repository contains only the curated output in `content/`.
 
+The current repository also has a temporary, exact path-by-path legacy map in `site/publish.config.mjs`. It imports material that was already public in the old blog and supplies the newer public metadata contract during migration. It does not publish directories wholesale; new writing should use `publish: true`.
+
 ## Mark a piece public
 
 Add frontmatter like:

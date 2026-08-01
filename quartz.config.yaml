@@ -12,12 +12,12 @@ configuration:
     - templates
     - .obsidian
   theme:
-    fontOrigin: googleFonts
-    cdnCaching: true
+    fontOrigin: local
+    cdnCaching: false
     typography:
-      header: IBM Plex Sans
-      body: Source Serif 4
-      code: IBM Plex Mono
+      header: system-ui
+      body: system-ui
+      code: ui-monospace
     colors:
       lightMode:
         light: "#fffcf0"
@@ -72,7 +72,7 @@ plugins:
     enabled: true
     order: 50
     layout:
-      position: right
+      position: left
       priority: 30
       condition: not-index
   - source: "@quartz-community/crawl-links"
@@ -87,21 +87,21 @@ plugins:
     options: { renderEngine: katex }
     order: 80
   - source: "@quartz-community/quartz-fonts"
-    enabled: true
-    options: { useThemeFonts: true, fontOrigin: googleFonts }
+    enabled: false
+    options: { useThemeFonts: true, fontOrigin: local }
   - source: "@quartz-community/remove-draft"
     enabled: false
   - source: "@quartz-community/explicit-publish"
     enabled: true
-  - source: "@quartz-community/alias-redirects"
+  - source: "./site/plugins/safe-alias-redirects"
     enabled: true
   - source: "@quartz-community/content-index"
     enabled: true
-    options: { enableSiteMap: true, enableRSS: true }
+    options: { enableSiteMap: true, enableRSS: false }
   - source: "@quartz-community/favicon"
     enabled: true
   - source: "@quartz-community/og-image"
-    enabled: true
+    enabled: false
   - source: "@quartz-community/cname"
     enabled: true
   - source: "@quartz-community/content-page"
@@ -150,7 +150,6 @@ plugins:
     options:
       links:
         GitHub: https://github.com/chenghaomou
-        RSS: https://sleeplessindebugging.blog/index.xml
     layout:
       position: footer
       priority: 50

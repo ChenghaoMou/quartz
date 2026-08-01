@@ -37,6 +37,11 @@
         "defaultPosition": "header",
         "defaultPriority": 10
       },
+      "AppearancePull": {
+        "displayName": "Appearance Pull Switch",
+        "defaultPosition": "right",
+        "defaultPriority": 10
+      },
       "HomeHero": {
         "displayName": "Home Hero",
         "defaultPosition": "beforeBody",

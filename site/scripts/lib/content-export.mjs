@@ -26,6 +26,12 @@ function toPosix(value) {
   return value.split(path.sep).join("/")
 }
 
+function isIgnoredPath(relative, config) {
+  return (config.ignoredVaultPaths ?? []).some(
+    (ignored) => relative === ignored || relative.startsWith(`${ignored}/`),
+  )
+}
+
 function normaliseNoteTarget(value) {
   return decodeURIComponent(value).replace(/\\/g, "/").replace(/^\.\//, "").replace(/\.md$/i, "")
 }
@@ -56,13 +62,48 @@ function validatePublishedNote(note) {
     if (fm[field] === undefined || fm[field] === "")
       throw new Error(`${relative}: missing ${field}`)
   }
-  if (!["essay", "note"].includes(fm.type))
-    throw new Error(`${relative}: type must be essay or note`)
+  if (!["essay", "note", "page"].includes(fm.type))
+    throw new Error(`${relative}: type must be essay, note, or page`)
   if (fm.type === "note" && !["draft", "in-progress", "evergreen"].includes(fm.status)) {
     throw new Error(`${relative}: notes require status draft, in-progress, or evergreen`)
   }
   if (fm.tags !== undefined && !Array.isArray(fm.tags))
     throw new Error(`${relative}: tags must be a list`)
+}
+
+function escapeRegExp(value) {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")
+}
+
+function stripMissingEmbed(body, target) {
+  const escaped = escapeRegExp(target)
+  return body.replace(new RegExp(`^\\s*!\\[\\[${escaped}\\s*(?:\\|[^\\]]*)?\\]\\]\\s*$`, "gm"), "")
+}
+
+function stripLeadingHeading(body) {
+  return body.replace(/^\s*#\s+[^\n]+\r?\n+/, "")
+}
+
+function applyLegacyReplacements(body, replacements = []) {
+  return replacements.reduce(
+    (result, replacement) => result.replaceAll(replacement.from, replacement.to),
+    body,
+  )
+}
+
+async function resolveAsset(note, target, config) {
+  const sourceRelative = note.sourceRelative ?? note.relative
+  const candidates = [
+    path.posix.normalize(path.posix.join(path.posix.dirname(sourceRelative), target)),
+    ...(config.assetSearchPaths ?? []).map((root) => path.posix.join(root, target)),
+  ]
+  for (const relative of candidates) {
+    const absolute = safeTarget(config.vault, relative)
+    try {
+      if ((await fs.stat(absolute)).isFile()) return { absolute, relative }
+    } catch {}
+  }
+  return undefined
 }
 
 function publicMarkdown(note, config) {
@@ -138,13 +179,40 @@ export async function exportContent(config) {
   const basenameMap = new Map()
 
   for (const absolute of vaultFiles.filter((file) => file.toLowerCase().endsWith(".md"))) {
-    const relative = toPosix(path.relative(config.vault, absolute))
-    const parsed = parseMarkdown(await fs.readFile(absolute, "utf8"), relative)
+    const sourceRelative = toPosix(path.relative(config.vault, absolute))
+    if (isIgnoredPath(sourceRelative, config)) continue
+    const legacy = config.enableLegacyImport ? config.legacyPublic?.[sourceRelative] : undefined
+    const source = await fs.readFile(absolute, "utf8")
+    let parsed
+    try {
+      parsed = parseMarkdown(source, sourceRelative)
+    } catch (error) {
+      if (legacy || /^publish:\s*(?:true|yes)\s*$/im.test(source)) throw error
+      continue
+    }
+    const relative = legacy?.output ?? sourceRelative
+    const frontmatter = legacy
+      ? {
+          ...parsed.frontmatter,
+          title: legacy.title,
+          description: legacy.description,
+          published: legacy.published,
+          type: legacy.type,
+          status: legacy.status,
+          publish: true,
+        }
+      : parsed.frontmatter
     const note = {
       absolute,
       relative,
-      ...parsed,
-      published: parsed.frontmatter[config.publishField] === true,
+      sourceRelative,
+      frontmatter,
+      body: applyLegacyReplacements(
+        legacy?.stripLeadingHeading ? stripLeadingHeading(parsed.body) : parsed.body,
+        legacy?.replacements,
+      ),
+      legacy: Boolean(legacy),
+      published: legacy ? true : parsed.frontmatter[config.publishField] === true,
     }
     notes.push(note)
     const key = normaliseNoteTarget(relative)
@@ -169,17 +237,19 @@ export async function exportContent(config) {
       if (!config.copiedAssetExtensions.includes(path.posix.extname(target).toLowerCase())) {
         throw new Error(`${note.relative}: unsupported asset ${target}`)
       }
-      const relative = toPosix(
-        path.posix.normalize(path.posix.join(path.posix.dirname(note.relative), target)),
-      )
-      const absolute = safeTarget(config.vault, relative)
-      try {
-        const stat = await fs.stat(absolute)
-        if (!stat.isFile()) throw new Error()
-      } catch {
+      const resolved = await resolveAsset(note, target, config)
+      if (!resolved) {
+        if (note.legacy) {
+          note.body = stripMissingEmbed(note.body, target)
+          continue
+        }
         throw new Error(`${note.relative}: missing asset ${target}`)
       }
-      assetCopies.set(relative, absolute)
+      const destination = path.posix.join(
+        path.posix.dirname(note.relative),
+        path.posix.basename(target),
+      )
+      assetCopies.set(destination, resolved.absolute)
     }
   }
 
@@ -207,7 +277,7 @@ export async function exportContent(config) {
   }
   const manifest = {
     version: 1,
-    source: "curated-export",
+    source: config.enableLegacyImport ? "curated-export+legacy-public" : "curated-export",
     files,
   }
 

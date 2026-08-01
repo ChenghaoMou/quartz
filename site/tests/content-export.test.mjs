@@ -18,8 +18,12 @@ function config(root) {
     staticContent: path.join(root, "static"),
     manifest: path.join(root, "manifest.json"),
     publishField: "publish",
+    ignoredVaultPaths: [],
     publicFrontmatter: ["title", "description", "published", "type", "status", "tags"],
     copiedAssetExtensions: [".png"],
+    assetSearchPaths: [],
+    enableLegacyImport: false,
+    legacyPublic: {},
   }
 }
 
@@ -82,4 +86,35 @@ test("copies assets referenced by published notes", async (t) => {
   )
   await exportContent(config(root))
   assert.equal(await fs.readFile(path.join(root, "content", "plot.png"), "utf8"), "pixels")
+})
+
+test("imports only explicitly mapped legacy pages and supplies public metadata", async (t) => {
+  const root = await fixture()
+  t.after(() => fs.rm(root, { recursive: true, force: true }))
+  await fs.mkdir(path.join(root, "vault", "posts"), { recursive: true })
+  await fs.writeFile(
+    path.join(root, "vault", "posts", "old.md"),
+    "---\ntitle: Old title\ncreated: 2020-01-01\n---\n# Old title\n\nUseful body.",
+  )
+  await fs.writeFile(path.join(root, "vault", "posts", "private.md"), "# Not mapped")
+  const options = {
+    ...config(root),
+    enableLegacyImport: true,
+    legacyPublic: {
+      "posts/old.md": {
+        output: "writing/old.md",
+        title: "Old title",
+        description: "A public description.",
+        published: "2020-01-01",
+        type: "essay",
+        stripLeadingHeading: true,
+      },
+    },
+  }
+  const manifest = await exportContent(options)
+  const output = await fs.readFile(path.join(root, "content", "writing", "old.md"), "utf8")
+  assert.match(output, /description: A public description/)
+  assert.match(output, /Useful body/)
+  assert.doesNotMatch(output, /# Old title/)
+  assert.equal(manifest.files["posts/private.md"], undefined)
 })

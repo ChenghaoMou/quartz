@@ -1,10 +1,18 @@
 {
   "version": 1,
-  "source": "curated-export",
+  "source": "curated-export+legacy-public",
   "files": {
-    "about.md": "f1642643302db05f32a437eaf8c148f2613c7d1976f2706c202a779b0c756525",
+    "DBD48D14-3318-4978-A90F-9FC88FFC86B7_1_105_c.jpeg": "5f7592f8bc43cb745150cf1660aae8d0b626e28c85c43eebfa34f64462ecb061",
+    "about.md": "84f3489390a3eb3986f294e66d89a7083ece733f5cae9ad584b76d5e42c69bed",
+    "colophon.md": "93d8063529ae7435e58a87bccbf78afcd6b5327793932df1c7db4956be23e60f",
     "index.md": "bb9afd5301b677cd6647cf75c629478b3b7be0d020ed90af470a3c1b2eeb3a0a",
     "topics/index.md": "1f28ef4d2bde1c5a9392eb03356105c5be141914f07aad5a116f4a6147cbd5a0",
-    "writing/index.md": "1ea19a3f2325bb80bed45e3eef2f74d8cce908b34644159a738e634fbd551834"
+    "writing/Pasted image 20230315202712.png": "8b33250faf53c4b810221c60c091d7b978d0e3adbfcea6c0b8917cd0c97eee30",
+    "writing/Pasted image 20230318111431.png": "e5b946ba5d3951b69cb6502047521883e30ad231e5703a31c8f36930e643bc18",
+    "writing/Pasted image 20230318111458.png": "edb816d0662ce7b9fffedcc77e5e458c4b12b63953c30fac4a15573d1205ad69",
+    "writing/fine-tuning-idefics2-for-contract-vqa.md": "70e6282b6bb77b8098ec3d3dbfb1f3ee6d8d317bf4fca84b3200de362539ac2b",
+    "writing/index.md": "1ea19a3f2325bb80bed45e3eef2f74d8cce908b34644159a738e634fbd551834",
+    "writing/large-scale-near-deduplication-behind-bigcode.md": "56c0490bd83139a8188042ab55df9b2fb02e9fa1de50f1aaef002956b1774cf8",
+    "writing/pain-points-building-voice-agents.md": "8fdd0321f8941396e240f2cabd0f7f2667ab598ea95401f12342975f4adccd07"
   }
 }

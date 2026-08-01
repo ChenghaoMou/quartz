@@ -1,3 +1,5 @@
 public
 node_modules
 .quartz-cache
+content
+.design/personal-writing-garden/screenshots
