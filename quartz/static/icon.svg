@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">
+  <style>
+    .pixel {
+      fill: #100f0f;
+    }
+
+    .faint {
+      opacity: 0.18;
+    }
+
+    .accent {
+      fill: #bc5215;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      .pixel {
+        fill: #fffcf0;
+      }
+
+      .accent {
+        fill: #da702c;
+      }
+    }
+  </style>
+  <rect class="pixel" x="6" y="6" width="9" height="9" />
+  <rect class="pixel faint" x="21" y="6" width="9" height="9" />
+  <rect class="pixel accent" x="36" y="6" width="9" height="9" />
+  <rect class="pixel" x="6" y="21" width="9" height="9" />
+  <rect class="pixel" x="21" y="21" width="9" height="9" />
+  <rect class="pixel faint" x="36" y="21" width="9" height="9" />
+  <rect class="pixel accent" x="6" y="36" width="9" height="9" />
+  <rect class="pixel faint" x="21" y="36" width="9" height="9" />
+  <rect class="pixel" x="36" y="36" width="9" height="9" />
+</svg>
