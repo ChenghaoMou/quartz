@@ -1,6 +1,7 @@
 import { readdirSync, rmSync, statSync } from "node:fs"
 import { join, resolve } from "node:path"
 import { spawnSync } from "node:child_process"
+import { build } from "esbuild"
 import process from "node:process"
 
 const root = resolve(import.meta.dirname, "../..")
@@ -27,5 +28,25 @@ for (const directory of plugins) {
   if (result.status !== 0) {
     process.exit(result.status ?? 1)
   }
+
+  const clientDirectory = join(directory, "src/client")
+  if (statSync(clientDirectory, { throwIfNoEntry: false })?.isDirectory()) {
+    const clientEntries = readdirSync(clientDirectory)
+      .filter((file) => file.endsWith(".ts"))
+      .sort()
+
+    for (const entry of clientEntries) {
+      await build({
+        entryPoints: [join(clientDirectory, entry)],
+        outfile: join(directory, "dist/client", entry.replace(/\.ts$/, ".bundle.js")),
+        bundle: true,
+        format: "iife",
+        minify: true,
+        platform: "browser",
+        target: ["chrome109", "edge115", "firefox102", "safari15.6"],
+      })
+    }
+  }
+
   console.log(`Built site plugin: ${name}`)
 }

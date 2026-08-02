@@ -42,6 +42,11 @@
         "defaultPosition": "right",
         "defaultPriority": 10
       },
+      "InteractionSounds": {
+        "displayName": "Interaction Sounds",
+        "defaultPosition": "header",
+        "defaultPriority": 30
+      },
       "HomeHero": {
         "displayName": "Home Hero",
         "defaultPosition": "beforeBody",

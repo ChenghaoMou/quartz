@@ -175,6 +175,14 @@ plugins:
       priority: 10
   - source:
       repo: "./site/plugins/personal-site"
+      name: InteractionSounds
+    enabled: true
+    order: 100
+    layout:
+      position: header
+      priority: 30
+  - source:
+      repo: "./site/plugins/personal-site"
       name: HomeHero
     enabled: true
     order: 100

@@ -1,5 +1,6 @@
 import { jsx, jsxs } from "preact/jsx-runtime"
 import type { QuartzComponent, QuartzComponentConstructor } from "@quartz-community/types"
+import { ComputerIcon, HugeIconPaths, Moon02Icon, Sun01Icon } from "./icons.js"
 
 export const appearanceScript = String.raw`
 (() => {
@@ -9,7 +10,7 @@ export const appearanceScript = String.raw`
   const names = { light: "Light", system: "System", dark: "Dark" }
   const stored = localStorage.getItem(key)
   const initial = modes.includes(stored) ? stored : "system"
-  const apply = (mode, announce = false) => {
+  const apply = (mode, announce = false, source = "system") => {
     const resolved = mode === "system" ? (media.matches ? "dark" : "light") : mode
     document.documentElement.dataset.appearance = mode
     document.documentElement.setAttribute("saved-theme", resolved)
@@ -21,7 +22,9 @@ export const appearanceScript = String.raw`
       button.setAttribute("aria-label", "Colour scheme: " + names[mode] + ". Pull for " + names[next] + ".")
       button.setAttribute("title", names[mode] + " colour scheme · pull for " + names[next])
     })
-    if (announce) document.dispatchEvent(new CustomEvent("themechange", { detail: { theme: resolved } }))
+    if (announce) {
+      document.dispatchEvent(new CustomEvent("themechange", { detail: { theme: resolved, source } }))
+    }
   }
   apply(initial)
   let appearanceRevealAnimation = null
@@ -192,7 +195,7 @@ export const appearanceScript = String.raw`
         localStorage.setItem(key, next)
         if (reducedMotion.matches || typeof document.documentElement.animate !== "function") {
           pendingAppearance = null
-          apply(next, true)
+          apply(next, true, "user")
           return
         }
 
@@ -283,7 +286,7 @@ export const appearanceScript = String.raw`
               offset: 1,
             },
           ]
-          apply(next, true)
+          apply(next, true, "user")
           const animation = root.animate(revealFrames, {
             duration: 720,
             easing: "cubic-bezier(0.22, 0.72, 0.24, 1)",
@@ -382,7 +385,9 @@ export const appearanceScript = String.raw`
     })
   }
   media.addEventListener("change", () => {
-    if ((document.documentElement.dataset.appearance || "system") === "system") apply("system", true)
+    if ((document.documentElement.dataset.appearance || "system") === "system") {
+      apply("system", true, "system")
+    }
   })
   document.addEventListener("nav", initialise)
   document.addEventListener("render", initialise)
@@ -393,43 +398,21 @@ export const appearanceScript = String.raw`
 type PullMode = "light" | "system" | "dark"
 type PullPlacement = "sidebar" | "compact"
 
-function PullModeSymbol({
-  mode,
-  transform,
-  moonMaskId,
-}: {
-  mode: PullMode
-  transform: string
-  moonMaskId: string
-}) {
-  const children =
-    mode === "light"
-      ? [
-          jsx("circle", { class: "pull-symbol-stroke", cx: "0", cy: "0", r: "2.6" }),
-          jsx("path", {
-            class: "pull-symbol-stroke",
-            d: "M 0 -6 V -4.5 M 0 6 V 4.5 M -6 0 H -4.5 M 6 0 H 4.5 M -4.25 -4.25 L -3.2 -3.2 M 4.25 4.25 L 3.2 3.2 M 4.25 -4.25 L 3.2 -3.2 M -4.25 4.25 L -3.2 3.2",
-          }),
-        ]
-      : mode === "system"
-        ? [
-            jsx("circle", { class: "pull-symbol-stroke", cx: "0", cy: "0", r: "5.3" }),
-            jsx("path", { class: "pull-symbol-fill", d: "M 0 -5.3 A 5.3 5.3 0 0 0 0 5.3 Z" }),
-          ]
-        : [
-            jsx("circle", {
-              class: "pull-symbol-fill",
-              cx: "0",
-              cy: "0",
-              r: "5.6",
-              mask: `url(#${moonMaskId})`,
-            }),
-          ]
+function PullModeSymbol({ mode, transform }: { mode: PullMode; transform: string }) {
+  const icon = mode === "light" ? Sun01Icon : mode === "system" ? ComputerIcon : Moon02Icon
 
-  return jsxs("g", {
+  return jsx("g", {
     class: `pull-mode-symbol pull-mode-symbol-${mode}`,
     transform,
-    children,
+    children: jsx("g", {
+      class: "pull-symbol-hugeicon",
+      transform: "translate(-6 -6) scale(0.5)",
+      children: jsx(HugeIconPaths, {
+        icon,
+        strokeWidth: 1.5,
+        vectorEffect: "non-scaling-stroke",
+      }),
+    }),
   })
 }
 
@@ -463,7 +446,6 @@ export function PullSwitch({ placement }: { placement: PullPlacement }) {
   const materialId = `pull-metal-${placement}`
   const faceId = `pull-face-${placement}`
   const grainId = `pull-grain-${placement}`
-  const moonMaskId = `pull-moon-mask-${placement}`
   const symbolTransform = sidebar ? "translate(0 25.2) scale(1.5)" : "translate(0 9) scale(0.75)"
   const fixture = sidebar
     ? [
@@ -580,18 +562,6 @@ export function PullSwitch({ placement }: { placement: PullPlacement }) {
                   jsx("feBlend", { in: "SourceGraphic", in2: "clippedGrain", mode: "soft-light" }),
                 ],
               }),
-              jsxs("mask", {
-                id: moonMaskId,
-                x: "-6",
-                y: "-6",
-                width: "12",
-                height: "12",
-                maskUnits: "userSpaceOnUse",
-                children: [
-                  jsx("rect", { x: "-6", y: "-6", width: "12", height: "12", fill: "white" }),
-                  jsx("circle", { cx: "2.4", cy: "-0.8", r: "4.7", fill: "black" }),
-                ],
-              }),
             ],
           }),
           jsxs("g", {
@@ -635,9 +605,9 @@ export function PullSwitch({ placement }: { placement: PullPlacement }) {
                 filter: `url(#${grainId})`,
                 d: tag.body,
               }),
-              jsx(PullModeSymbol, { mode: "light", transform: symbolTransform, moonMaskId }),
-              jsx(PullModeSymbol, { mode: "system", transform: symbolTransform, moonMaskId }),
-              jsx(PullModeSymbol, { mode: "dark", transform: symbolTransform, moonMaskId }),
+              jsx(PullModeSymbol, { mode: "light", transform: symbolTransform }),
+              jsx(PullModeSymbol, { mode: "system", transform: symbolTransform }),
+              jsx(PullModeSymbol, { mode: "dark", transform: symbolTransform }),
             ],
           }),
         ],

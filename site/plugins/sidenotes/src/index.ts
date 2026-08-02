@@ -62,8 +62,9 @@ export const Sidenotes: QuartzTransformerPlugin = () => ({
           script: String.raw`
 const sidenoteDesktop = window.matchMedia("(min-width: 72rem)")
 const sidenoteReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)")
+let sidenoteTargetTimeout
 
-const clearSidenoteTarget = () => {
+const resetSidenoteTargetState = () => {
   document
     .querySelectorAll(".sidenote.is-targeted")
     .forEach((item) => item.classList.remove("is-targeted"))
@@ -71,6 +72,22 @@ const clearSidenoteTarget = () => {
     item.classList.remove("is-targeted")
     item.setAttribute("aria-pressed", "false")
   })
+}
+
+const clearSidenoteTarget = () => {
+  if (sidenoteTargetTimeout !== undefined) {
+    window.clearTimeout(sidenoteTargetTimeout)
+    sidenoteTargetTimeout = undefined
+  }
+
+  resetSidenoteTargetState()
+}
+
+const scheduleSidenoteTargetClear = () => {
+  sidenoteTargetTimeout = window.setTimeout(() => {
+    sidenoteTargetTimeout = undefined
+    resetSidenoteTargetState()
+  }, 1800)
 }
 
 const syncSidenotes = () => {
@@ -86,8 +103,15 @@ const activateSidenote = (button) => {
   const note = document.getElementById(button.getAttribute("aria-controls"))
   if (!note) return
 
+  const wasTargeted = button.classList.contains("is-targeted")
   const open = sidenoteDesktop.matches || !note.classList.contains("is-open")
   clearSidenoteTarget()
+
+  if (wasTargeted) {
+    if (!sidenoteDesktop.matches) note.classList.remove("is-open")
+    button.setAttribute("aria-expanded", String(sidenoteDesktop.matches))
+    return
+  }
 
   if (!sidenoteDesktop.matches) {
     note.classList.toggle("is-open", open)
@@ -102,14 +126,26 @@ const activateSidenote = (button) => {
     behavior: sidenoteReducedMotion.matches ? "auto" : "smooth",
     block: "nearest",
   })
+  scheduleSidenoteTargetClear()
 }
 
 document.addEventListener("click", (event) => {
   const button = event.target?.closest?.(".sidenote-ref")
-  if (button) activateSidenote(button)
+  if (button) {
+    activateSidenote(button)
+    return
+  }
+
+  clearSidenoteTarget()
 })
-document.addEventListener("nav", syncSidenotes)
-document.addEventListener("render", syncSidenotes)
+
+const resetSidenotes = () => {
+  clearSidenoteTarget()
+  syncSidenotes()
+}
+
+document.addEventListener("nav", resetSidenotes)
+document.addEventListener("render", resetSidenotes)
 sidenoteDesktop.addEventListener?.("change", syncSidenotes)
 syncSidenotes()
 `,
