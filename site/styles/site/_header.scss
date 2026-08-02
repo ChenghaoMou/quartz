@@ -3,8 +3,8 @@
 .page-header > header {
   position: relative;
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 2.75rem 2.75rem;
-  grid-template-areas: "brand search theme";
+  grid-template-columns: minmax(0, 1fr) 2.75rem 2.75rem 2.75rem;
+  grid-template-areas: "brand search sound theme";
   align-items: center;
   width: 100%;
   margin: 0;
@@ -93,6 +93,36 @@
   cursor: pointer;
 }
 
+.interaction-sounds {
+  display: inline-grid;
+  grid-area: sound;
+  place-items: center;
+  width: 2.75rem;
+  min-width: 2.75rem;
+  height: 4rem;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+}
+
+.interaction-sounds .sound-icon {
+  grid-area: 1 / 1;
+  width: 1rem;
+  height: 1rem;
+}
+
+.interaction-sounds .sound-icon-off,
+.interaction-sounds[data-sound-enabled="false"] .sound-icon-on {
+  display: none;
+}
+
+.interaction-sounds[data-sound-enabled="false"] .sound-icon-off {
+  display: block;
+}
+
 .appearance-pull {
   position: relative;
   margin: 0;
@@ -116,8 +146,16 @@
 }
 
 .page-header > header > .search > .search-button:hover,
+.interaction-sounds:hover,
 .appearance-pull:hover {
   color: var(--blue);
+}
+
+.page-header > header > .search > .search-button:focus-visible,
+.interaction-sounds:focus-visible,
+.appearance-pull:focus-visible {
+  outline: 1px solid var(--blue);
+  outline-offset: -0.45rem;
 }
 
 .pull-assembly {
@@ -248,17 +286,11 @@
   display: inline;
 }
 
-.pull-symbol-stroke {
+.pull-symbol-hugeicon {
   fill: none;
   stroke: currentcolor;
   stroke-linecap: round;
   stroke-linejoin: round;
-  stroke-width: 1.35;
-  vector-effect: non-scaling-stroke;
-}
-
-.pull-symbol-fill {
-  fill: currentcolor;
 }
 
 .appearance-pull-compact .pull-tag-shadow-ambient {
@@ -281,8 +313,9 @@
 }
 
 .page-header > header > .search > .search-button svg {
-  width: 0.95rem;
-  min-width: 0.95rem;
+  width: 1rem;
+  min-width: 1rem;
+  height: 1rem;
   margin: 0;
 }
 

@@ -2,8 +2,8 @@
 
 @media (min-width: 48rem) {
   .page-header > header {
-    grid-template-columns: minmax(8rem, 1fr) 2.75rem 2.75rem;
-    grid-template-areas: "brand search theme";
+    grid-template-columns: minmax(8rem, 1fr) 2.75rem 2.75rem 2.75rem;
+    grid-template-areas: "brand search sound theme";
   }
 
   .page-header > header > .search > .search-button {
@@ -24,16 +24,22 @@
 
 @media (min-width: 72rem) {
   .page-header > header {
-    grid-template-columns: minmax(8rem, 1fr) 3.75rem;
-    grid-template-areas: "brand utility";
+    grid-template-columns: minmax(8rem, 1fr) 3.75rem 3.75rem;
+    grid-template-areas: "brand search theme";
   }
 
   .page-header > header > .search {
     z-index: 4;
-    grid-area: utility;
+    grid-area: search;
   }
 
   .page-header > header > .search > .search-button {
+    width: 3.75rem;
+  }
+
+  .interaction-sounds {
+    z-index: 4;
+    grid-area: theme;
     width: 3.75rem;
   }
 
@@ -44,7 +50,7 @@
   .site-switch-mount {
     position: relative;
     display: block;
-    grid-area: utility;
+    grid-area: theme;
     width: 3.75rem;
     height: 4rem;
   }
@@ -138,8 +144,21 @@
     padding-left: 1rem;
   }
 
-  .toc {
+  .page .toc {
+    overflow-x: hidden;
     font-size: 0.8rem;
+  }
+
+  .page .toc .toc-content {
+    overflow-x: hidden;
+  }
+
+  .page .toc:has(button.toc-header.collapsed) {
+    flex: 0 0 auto;
+  }
+
+  .page .toc button.toc-header.collapsed + .toc-content {
+    display: none;
   }
 
   .toc .depth-1 {
@@ -163,13 +182,14 @@
   }
 
   .sidenote {
+    --sidenote-idle-background: transparent;
+
     display: block;
     float: right;
     clear: right;
     width: 10rem;
     margin: 0.2rem -13rem 1rem 1.5rem;
     padding: 0;
-    background: transparent;
   }
 
   .sidenote-ref {

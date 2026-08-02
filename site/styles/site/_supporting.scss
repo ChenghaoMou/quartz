@@ -40,17 +40,31 @@
 }
 
 .sidenote-ref.is-targeted {
-  background: var(--cyan);
-  box-shadow: 0 0 0 0.15rem var(--sidenote-active);
-  color: var(--paper);
+  animation: sidenote-ref-highlight 1800ms ease-out forwards;
+}
+
+@keyframes sidenote-ref-highlight {
+  from {
+    background: var(--cyan);
+    box-shadow: 0 0 0 0.15rem var(--sidenote-active);
+    color: var(--paper);
+  }
+
+  to {
+    background: transparent;
+    box-shadow: 0 0 0 0 transparent;
+    color: var(--cyan);
+  }
 }
 
 .sidenote {
+  --sidenote-idle-background: var(--paper-2);
+
   display: none;
   width: auto;
   margin: 0.75rem 0 1rem;
   padding: 0.75rem 1rem;
-  background: var(--paper-2);
+  background: var(--sidenote-idle-background);
   color: var(--muted);
   font-size: 0.8rem;
   line-height: 1.5;
@@ -66,9 +80,28 @@
 }
 
 .sidenote.is-targeted {
-  background: var(--sidenote-active);
-  box-shadow: 0 0 0 0.35rem var(--sidenote-active);
-  color: var(--text);
+  animation: sidenote-highlight 1800ms ease-out forwards;
+}
+
+@keyframes sidenote-highlight {
+  from {
+    background: var(--sidenote-active);
+    box-shadow: 0 0 0 0.35rem var(--sidenote-active);
+    color: var(--text);
+  }
+
+  to {
+    background: var(--sidenote-idle-background);
+    box-shadow: 0 0 0 0 transparent;
+    color: var(--muted);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sidenote-ref.is-targeted,
+  .sidenote.is-targeted {
+    animation-duration: 1ms;
+  }
 }
 
 .sidenote-number {
