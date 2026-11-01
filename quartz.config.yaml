@@ -18,6 +18,12 @@ configuration:
     - inbox
     - highlights/Archive
     - "**/__order__.md"
+    # Vault infrastructure that the asset emitter would otherwise copy verbatim.
+    - compose.yaml
+    - Dockerfile.*
+    - Makefile
+    - LICENSE
+    - "*.bib"
   theme:
     fontOrigin: local
     cdnCaching: false
@@ -42,9 +48,9 @@ configuration:
         gray: "#575653"
         darkgray: "#cecdc3"
         dark: "#fffcf0"
-        secondary: "#8b7ec8"
+        secondary: "#4385be"
         tertiary: "#da702c"
-        highlight: "rgba(139, 126, 200, 0.18)"
+        highlight: "rgba(67, 133, 190, 0.18)"
         textHighlight: "rgba(173, 131, 1, 0.42)"
 plugins:
   - source: "@quartz-community/note-properties"
@@ -102,9 +108,9 @@ plugins:
   - source: "@quartz-community/remove-draft"
     enabled: true
   - source: "@quartz-community/explicit-publish"
-    # Publication is controlled by the folder policy above. The external
-    # repository's existing notes predate per-file `publish: true` flags.
-    enabled: false
+    # Only Markdown with `publish: true` is rendered. The folder ignore list
+    # above stays as a second guard for private areas of the vault.
+    enabled: true
   - source: "./site/plugins/safe-alias-redirects"
     enabled: true
   - source: "@quartz-community/content-index"
@@ -153,6 +159,7 @@ plugins:
       condition: not-index
   - source: "@quartz-community/breadcrumbs"
     enabled: true
+    options: { spacerSymbol: "/" }
     layout:
       position: beforeBody
       priority: 5

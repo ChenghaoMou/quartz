@@ -21,9 +21,10 @@ let soundsEnabled = readEnabledPreference()
 
 function readEnabledPreference(): boolean {
   try {
-    return localStorage.getItem(STORAGE_KEY) !== "false"
+    // Sounds are opt-in: stay silent until the visitor turns them on.
+    return localStorage.getItem(STORAGE_KEY) === "true"
   } catch {
-    return true
+    return false
   }
 }
 

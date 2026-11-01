@@ -78,6 +78,14 @@ export const HomeHero: QuartzComponentConstructor = () => {
   return Component
 }
 
+// Date-only value built from the same local calendar date that formatDate displays,
+// so the machine-readable date never drifts a day from the visible one.
+function calendarDate(date: Date) {
+  const month = String(date.getMonth() + 1).padStart(2, "0")
+  const day = String(date.getDate()).padStart(2, "0")
+  return `${date.getFullYear()}-${month}-${day}`
+}
+
 function pageDate(page: PageData) {
   return page.dates?.created ?? page.dates?.modified ?? page.dates?.published
 }
@@ -130,7 +138,7 @@ export const HomeFeed: QuartzComponentConstructor<HomeFeedOptions> = (options = 
                           }),
                           date
                             ? jsx("time", {
-                                dateTime: date.toISOString(),
+                                dateTime: calendarDate(date),
                                 children: formatDate(date, cfg.locale),
                               })
                             : null,

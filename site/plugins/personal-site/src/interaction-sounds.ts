@@ -14,10 +14,10 @@ export const InteractionSounds: QuartzComponentConstructor = () => {
       class: "interaction-sounds",
       type: "button",
       "data-sound-toggle": "true",
-      "data-sound-enabled": "true",
+      "data-sound-enabled": "false",
       "aria-label": "Interaction sounds",
-      "aria-pressed": "true",
-      title: "Mute interaction sounds",
+      "aria-pressed": "false",
+      title: "Enable interaction sounds",
       children: [
         jsx(HugeIcon, {
           class: "sound-icon sound-icon-on",

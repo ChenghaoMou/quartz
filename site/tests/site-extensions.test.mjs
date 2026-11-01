@@ -101,7 +101,7 @@ test("distinct or non-leading Markdown headings remain in the rendered note", ()
   assert.equal(nonLeading.children[1].tagName, "h1")
 })
 
-test("publishing policy keeps the external repository's private folders out of the build", async () => {
+test("publishing policy requires publish flags and keeps private folders and vault infrastructure out", async () => {
   const config = YAML.parse(await fs.readFile("quartz.config.yaml", "utf8"))
   const ignored = new Set(config.configuration.ignorePatterns)
   for (const pattern of [
@@ -115,16 +115,21 @@ test("publishing policy keeps the external repository's private folders out of t
     "inbox",
     "highlights/Archive",
     "**/__order__.md",
+    "compose.yaml",
+    "Dockerfile.*",
+    "Makefile",
+    "LICENSE",
+    "*.bib",
   ]) {
     assert.equal(ignored.has(pattern), true, `missing ignored content pattern: ${pattern}`)
   }
 
   const plugin = (source) => config.plugins.find((candidate) => candidate.source === source)
   assert.equal(plugin("@quartz-community/remove-draft").enabled, true)
-  assert.equal(plugin("@quartz-community/explicit-publish").enabled, false)
+  assert.equal(plugin("@quartz-community/explicit-publish").enabled, true)
 })
 
-test("home feed includes writing from the external repository without publish flags", () => {
+test("home feed lists notes and posts but not folder indexes or pages", () => {
   const Feed = HomeFeed()
   const html = render(
     Feed({
@@ -184,12 +189,13 @@ test("interaction sounds render an accessible persisted header control", async (
 
   assert.match(html, /class="interaction-sounds"/)
   assert.match(html, /data-sound-toggle="true"/)
-  assert.match(html, /data-sound-enabled="true"/)
+  assert.match(html, /data-sound-enabled="false"/)
   assert.match(html, /aria-label="Interaction sounds"/)
-  assert.match(html, /aria-pressed="true"/)
+  assert.match(html, /aria-pressed="false"/)
   assert.match(html, /sound-icon-on/)
   assert.match(html, /sound-icon-off/)
   assert.match(Sounds.afterDOMLoaded, /interaction-sounds-enabled/)
+  assert.match(Sounds.afterDOMLoaded, /===\s*"true"/)
   assert.doesNotMatch(Sounds.afterDOMLoaded, /\bimport\s*(?:\(|[{'"*])/)
   assert.doesNotMatch(Sounds.afterDOMLoaded, /\bReact\b/)
 

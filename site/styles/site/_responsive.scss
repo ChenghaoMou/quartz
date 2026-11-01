@@ -103,9 +103,9 @@
   }
 
   .page > #quartz-body {
-    grid-template-columns: 12rem minmax(0, var(--reading-width)) 12rem;
+    grid-template-columns: var(--rail-width) minmax(0, var(--reading-width)) var(--rail-width);
     grid-template-rows: minmax(min-content, 1fr) auto;
-    column-gap: 2rem;
+    column-gap: var(--rail-gap);
     padding: 0 1.5rem;
   }
 
@@ -194,6 +194,38 @@
 
   .sidenote-ref {
     cursor: pointer;
+  }
+
+  /* The right rail only holds sidenotes. Where a page has none, let wide code
+     and tables grow into it instead of scrolling; short ones keep the column width. */
+  .center > article:not(:has(.sidenote)) figure[data-rehype-pretty-code-figure] > pre,
+  .center > article:not(:has(.sidenote)) .table-container {
+    width: max-content;
+    min-width: 100%;
+    max-width: calc(100% + var(--rail-gap) + var(--rail-width));
+  }
+}
+
+/* Touch screens: navigation links reach 44px; dense lists reach 32px. */
+@media (pointer: coarse) {
+  .breadcrumb-container a,
+  .tags > li > a,
+  footer a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.75rem;
+  }
+
+  .backlinks li,
+  .toc li {
+    margin: 0;
+  }
+
+  .backlinks a,
+  .toc a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2rem;
   }
 }
 
