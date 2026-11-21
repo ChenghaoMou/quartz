@@ -15,6 +15,12 @@
   .feed-line time {
     flex: 0 0 auto;
   }
+
+  li.section-li > .section {
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 1rem;
+    align-items: baseline;
+  }
 }
 
 @media (min-width: 72rem) {

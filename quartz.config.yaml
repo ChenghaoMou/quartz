@@ -185,6 +185,14 @@ plugins:
       priority: 30
   - source:
       repo: "./site/plugins/personal-site"
+      name: ParkBreeze
+    enabled: true
+    order: 100
+    layout:
+      position: footer
+      priority: 60
+  - source:
+      repo: "./site/plugins/personal-site"
       name: HomeHero
     enabled: true
     order: 100

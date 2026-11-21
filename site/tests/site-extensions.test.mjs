@@ -460,3 +460,10 @@ test("alias redirects never overwrite their canonical page", async (t) => {
     /url=.\/colophon/,
   )
 })
+
+test("short dates abbreviate September as Sep, as the home feed does", () => {
+  const options = { year: "numeric", month: "short", day: "2-digit" }
+  const date = new Date("2026-09-26T12:00:00Z")
+  assert.equal(date.toLocaleDateString("en-GB", options), "26 Sep 2026")
+  assert.equal(date.toLocaleDateString("en-GB", { month: "long" }), "September")
+})

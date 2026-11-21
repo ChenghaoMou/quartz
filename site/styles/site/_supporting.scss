@@ -155,8 +155,14 @@
   color: var(--blue);
 }
 
+/* Light mode gives the picture larger dots, a little more colour and full
+   opacity; the cream page between the dots otherwise washes it out. Dark mode
+   keeps smaller, dimmer dots that read like a lit display. */
 footer {
-  --park-opacity: 0.9;
+  --park-image: url("static/herbert-park.png");
+  --park-opacity: 1;
+  --park-dots: url("#{park.$dots-light}");
+  --park-filter: saturate(1.25) contrast(1.15);
   position: relative;
   isolation: isolate;
   display: flex;
@@ -177,39 +183,56 @@ footer {
 
 /* Herbert Park as a full-colour dot-matrix picture behind the footer: one pixel
    per dot, scaled up crisply and cut into square dots by a grid mask. An eased
-   gradient fades it into the page from the top, under the text. */
-footer::after {
+   gradient fades it into the page from the top, under the text. When motion is
+   allowed, the ParkBreeze script swaps the static picture for a canvas that
+   animates a breeze through it. */
+footer::after,
+footer > .park-canvas {
   position: absolute;
   inset: 0;
   z-index: -1;
-  background: url("static/herbert-park.png") 0 0 / 100% 100% no-repeat;
+  width: 100%;
+  height: 100%;
   image-rendering: pixelated;
   mask:
-    url(park.$dots) 0 0 / 100% 100% no-repeat,
+    var(--park-dots) 0 0 / 100% 100% no-repeat,
     linear-gradient(
       to bottom,
       transparent,
-      rgb(0 0 0 / 0.04) 10%,
-      rgb(0 0 0 / 0.16) 22%,
-      rgb(0 0 0 / 0.38) 34%,
-      rgb(0 0 0 / 0.66) 46%,
-      rgb(0 0 0 / 0.88) 58%,
-      #000 70%,
+      rgb(0 0 0 / 0.04) 6%,
+      rgb(0 0 0 / 0.16) 13%,
+      rgb(0 0 0 / 0.38) 20%,
+      rgb(0 0 0 / 0.66) 27%,
+      rgb(0 0 0 / 0.88) 34%,
+      #000 42%,
       #000 92%,
       transparent
     );
   mask-composite: intersect;
   opacity: var(--park-opacity);
+  filter: var(--park-filter);
   pointer-events: none;
+}
+
+footer::after {
+  background: var(--park-image) 0 0 / 100% 100% no-repeat;
   content: "";
 }
 
+footer.park-breeze::after {
+  visibility: hidden;
+}
+
 :root[saved-theme="dark"] footer {
+  --park-image: url("static/herbert-park-night.png");
   --park-opacity: 0.75;
+  --park-dots: url("#{park.$dots}");
+  --park-filter: none;
 }
 
 @media print {
-  footer::after {
+  footer::after,
+  footer > .park-canvas {
     display: none;
   }
 }

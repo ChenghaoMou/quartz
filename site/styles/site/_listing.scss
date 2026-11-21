@@ -1,0 +1,103 @@
+/* Tag and folder pages list notes with Quartz's page list. It reads like the
+   home feed: plain titles in the text colour, dates in the muted mono style on
+   the right on wider screens, rows separated by space alone. */
+
+.page-listing > p {
+  margin: 0 0 var(--space-3);
+  color: var(--muted);
+  font-size: var(--text-7);
+}
+
+.page-listing > p > span {
+  color: var(--faint);
+}
+
+ul.section-ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+li.section-li {
+  position: relative;
+  margin: 0;
+  padding: var(--space-2) 0;
+}
+
+li.section-li > .section {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-1);
+}
+
+/* The title comes first, as in the feed; the date follows it. */
+li.section-li > .section > .desc {
+  order: -1;
+}
+
+li.section-li > .section > .desc > h3 {
+  margin: 0;
+  font-size: inherit;
+  font-weight: inherit;
+  line-height: inherit;
+}
+
+li.section-li > .section > .desc > h3 > a {
+  color: var(--text);
+  transition: color var(--transition-fast);
+}
+
+li.section-li > .section > .desc > h3 > a:hover {
+  color: var(--blue);
+}
+
+/* The whole row is the link's hit area, as in the feed. */
+li.section-li > .section > .desc > h3 > a::after {
+  position: absolute;
+  inset: 0;
+  content: "";
+}
+
+li.section-li > .section > .desc > h3 > a:focus-visible {
+  outline: 0;
+}
+
+li.section-li > .section > .desc > h3 > a:focus-visible::after {
+  outline: 2px solid var(--blue);
+  outline-offset: 2px;
+}
+
+li.section-li > .section .meta {
+  justify-self: start;
+  margin: 0;
+  opacity: 1;
+  color: var(--muted);
+  font-family: var(--mono);
+  font-size: var(--text-8);
+}
+
+/* The feed has no tags, and on a tag page every row repeats the same one. */
+li.section-li > .section > .tags {
+  display: none;
+}
+
+/* On the tag index, each tag's heading matches the feed's "Recent writing". */
+div:has(> .page-listing) > h2 {
+  margin: var(--space-16) 0 var(--space-3);
+  padding-bottom: var(--space-3);
+  border-bottom: 1px solid var(--rule);
+  font-size: var(--text-4);
+}
+
+div:has(> .page-listing) > h2 > a.internal.tag-link {
+  margin: 0;
+  padding: 0;
+  border-radius: 0;
+  background: transparent;
+  color: var(--text);
+  transition: color var(--transition-fast);
+}
+
+div:has(> .page-listing) > h2 > a.internal.tag-link:hover {
+  color: var(--blue);
+}

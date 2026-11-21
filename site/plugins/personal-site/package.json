@@ -47,6 +47,11 @@
         "defaultPosition": "header",
         "defaultPriority": 30
       },
+      "ParkBreeze": {
+        "displayName": "Park Breeze",
+        "defaultPosition": "footer",
+        "defaultPriority": 60
+      },
       "HomeHero": {
         "displayName": "Home Hero",
         "defaultPosition": "beforeBody",
