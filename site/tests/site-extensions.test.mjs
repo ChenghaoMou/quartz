@@ -9,11 +9,11 @@ import YAML from "yaml"
 import Search01Icon from "@hugeicons/core-free-icons/Search01Icon"
 import { DeduplicateTitle } from "../plugins/deduplicate-title/dist/index.js"
 import {
-  AppearancePull,
   HomeFeed,
   HugeIcon,
   InteractionSounds,
   NoteStatus,
+  ThemeToggle,
 } from "../plugins/personal-site/dist/components/index.js"
 import { AliasRedirects } from "../plugins/safe-alias-redirects/dist/index.js"
 import { Sidenotes } from "../plugins/sidenotes/dist/index.js"
@@ -232,18 +232,24 @@ test("hover sounds stay in navigation chrome and out of reading surfaces", async
 })
 
 test("appearance events distinguish user changes from system changes", () => {
-  const Appearance = AppearancePull()
-  const script = Appearance.beforeDOMLoaded
+  const Toggle = ThemeToggle()
+  const script = Toggle.beforeDOMLoaded
 
   assert.match(script, /detail: \{ theme: resolved, source \}/)
   assert.match(script, /apply\(next, true, "user"\)/)
   assert.match(script, /apply\("system", true, "system"\)/)
 })
 
-test("sound control sits above the unchanged wide-screen pull switch", async () => {
+test("theme toggle is a plain icon button beside the sound control", async () => {
+  const Toggle = ThemeToggle()
+  const html = render(Toggle(baseProps))
   const headerStyles = await fs.readFile("site/styles/site/_header.scss", "utf8")
   const responsiveStyles = await fs.readFile("site/styles/site/_responsive.scss", "utf8")
 
+  assert.match(html, /^<button class="theme-toggle" type="button" data-theme-toggle/)
+  assert.equal(html.match(/<svg /g).length, 3)
+  assert.match(headerStyles, /\.theme-toggle \{[^}]*grid-area: theme;/s)
+  assert.match(headerStyles, /\.theme-toggle\[data-mode="system"\] \.theme-icon-system/)
   assert.match(
     headerStyles,
     /\.interaction-sounds \.sound-icon \{[^}]*width: 1rem;[^}]*height: 1rem;/s,
@@ -252,13 +258,13 @@ test("sound control sits above the unchanged wide-screen pull switch", async () 
     headerStyles,
     /\.page-header > header > \.search > \.search-button svg \{[^}]*width: 1rem;[^}]*height: 1rem;/s,
   )
-  assert.match(responsiveStyles, /grid-template-columns: minmax\(8rem, 1fr\) 3\.75rem 3\.75rem;/)
-  assert.match(responsiveStyles, /grid-template-areas: "brand search theme";/)
+  assert.match(headerStyles, /repeat\(3, var\(--header-control\)\)/)
   assert.match(
-    responsiveStyles,
-    /\.interaction-sounds \{[^}]*z-index: 4;[^}]*grid-area: theme;[^}]*width: 3\.75rem;/s,
+    headerStyles,
+    /@media \(pointer: fine\) \{\s*\.page-header > header \{\s*--header-control: 2\.25rem;/,
   )
-  assert.match(responsiveStyles, /\.appearance-pull-sidebar \{[^}]*top: calc\(100% \+ 0\.25rem\);/s)
+  assert.match(headerStyles, /--header-control: 2\.75rem;/)
+  assert.doesNotMatch(headerStyles + responsiveStyles, /appearance-pull|site-switch-mount/)
 })
 
 test("collapsed TOC keeps a wrapped disclosure heading visible", async () => {

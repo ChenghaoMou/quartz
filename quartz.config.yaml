@@ -154,7 +154,7 @@ plugins:
       condition: not-index
   - source: "@quartz-community/breadcrumbs"
     enabled: true
-    options: { spacerSymbol: "/" }
+    options: { spacerSymbol: "/", showCurrentPage: false }
     layout:
       position: beforeBody
       priority: 5

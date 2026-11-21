@@ -1,0 +1,195 @@
+/* Search: a quiet command palette on the site's spacing, type and border scales.
+   The plugin's own stylesheet loads after ours, so every rule starts from the
+   header to outrank the plugin's selectors. */
+
+$space: ".page-header .search > .search-container > .search-space";
+$layout: "#{$space} > .search-layout";
+
+.page-header .search > .search-container {
+  background: color-mix(in srgb, var(--paper) 72%, transparent);
+  backdrop-filter: blur(6px);
+}
+
+#{$space} {
+  width: min(56rem, calc(100% - 2 * var(--space-4)));
+  margin-top: 12vh;
+  font-family: var(--sans);
+}
+
+#{$space} > *:not(.ghost-text, .tag-suggestions) {
+  margin-bottom: var(--space-2);
+  border-radius: var(--radius-large);
+  background: var(--paper);
+  box-shadow:
+    0 2px 4px -1px rgb(16 15 15 / 6%),
+    0 12px 32px -12px rgb(16 15 15 / 18%);
+}
+
+#{$space} > input,
+#{$space} > .ghost-text {
+  height: 2.75rem;
+  padding: 0 var(--space-4);
+  font-family: var(--sans);
+  font-size: var(--text-6);
+  line-height: 2.75rem;
+}
+
+#{$space} > input {
+  border: 1px solid var(--rule);
+  color: var(--ink);
+  transition: border-color var(--transition-fast);
+}
+
+#{$space} > input::placeholder {
+  color: var(--muted);
+}
+
+#{$space} > input:focus,
+#{$space} > input:focus-visible {
+  border-color: var(--faint);
+  outline: 0;
+}
+
+#{$space} > .tag-suggestions {
+  top: calc(2.75rem + var(--space-1));
+  border: 1px solid var(--rule);
+  border-radius: var(--radius-medium);
+  background: var(--paper);
+  box-shadow: 0 12px 32px -12px rgb(16 15 15 / 18%);
+}
+
+#{$space} > .tag-suggestions > .tag-suggestion-item {
+  padding: var(--space-2) var(--space-4);
+  font-family: var(--sans);
+  font-size: var(--text-7);
+  color: var(--text);
+}
+
+#{$space} > .tag-suggestions > .tag-suggestion-item:hover,
+#{$space} > .tag-suggestions > .tag-suggestion-item.active {
+  background: var(--paper-2);
+  color: var(--ink);
+  font-weight: var(--font-medium);
+}
+
+#{$layout} {
+  overflow: hidden;
+  border: 1px solid var(--rule);
+}
+
+#{$layout} > div {
+  height: min(63vh, 36rem);
+  border-radius: 0;
+}
+
+#{$layout}[data-preview] > div:first-child {
+  border-right-color: var(--rule);
+}
+
+#{$layout} > .results-container {
+  padding: var(--space-2);
+}
+
+#{$layout} > .results-container .result-card {
+  padding: var(--space-2) var(--space-3);
+  border: 0;
+  border-radius: var(--radius-medium);
+  color: var(--text);
+  font-size: var(--text-7);
+  line-height: var(--leading-normal);
+  transition: background-color var(--transition-fast);
+}
+
+#{$layout} > .results-container .result-card:hover,
+#{$layout} > .results-container .result-card:focus,
+#{$layout} > .results-container .result-card.focus {
+  background: var(--paper-2);
+}
+
+#{$layout} > .results-container .result-card > h3 {
+  margin: 0;
+  color: var(--ink);
+  font-size: var(--text-7);
+  font-weight: var(--font-medium);
+  line-height: var(--leading-normal);
+}
+
+#{$layout} > .results-container .result-card > p {
+  margin-top: var(--space-1);
+  color: var(--muted);
+  font-size: var(--text-8);
+}
+
+#{$layout} > .results-container .result-card > ul.tags {
+  margin-top: var(--space-1);
+}
+
+#{$layout} > .results-container .result-card > ul > li > p {
+  margin: 0;
+  padding: 0;
+  border-radius: 0;
+  background: transparent;
+  color: var(--muted);
+  font-size: var(--text-8);
+  font-weight: var(--font-normal, 400);
+  line-height: var(--leading-normal);
+}
+
+#{$layout} > .results-container .result-card > ul > li > p.match-tag {
+  color: var(--ink);
+}
+
+/* Matches read like the site's own highlights, not solid blocks. */
+#{$layout} .highlight {
+  padding: 0 0.1em;
+  border-radius: var(--radius-small);
+  background: var(--textHighlight);
+  color: inherit;
+}
+
+#{$layout} > .preview-container {
+  padding: var(--space-6) var(--space-8);
+  color: var(--text);
+  font-size: var(--text-7);
+  line-height: var(--leading-prose);
+}
+
+#{$layout} > .preview-container .preview-inner {
+  max-width: var(--reading-width);
+  margin: 0;
+}
+
+#{$layout} > .preview-container .breadcrumb-container {
+  margin-bottom: var(--space-4);
+  font-size: var(--text-8);
+}
+
+/* The preview stacks the page header and the note directly; give the note room. */
+#{$layout} > .preview-container article.popover-hint {
+  margin-top: var(--space-6);
+}
+
+#{$layout} > .preview-container :is(h1, .article-title) {
+  margin: 0 0 var(--space-3);
+  font-size: var(--text-3);
+}
+
+#{$layout} > .preview-container h2 {
+  margin: var(--space-6) 0 var(--space-2);
+  font-size: var(--text-4);
+}
+
+#{$layout} > .preview-container :is(h3, h4, h5, h6) {
+  margin: var(--space-4) 0 var(--space-2);
+  font-size: var(--text-6);
+}
+
+#{$layout} > .preview-container :is(p, li) {
+  font-size: var(--text-7);
+}
+
+/* body outranks the plugin's rule but still yields to its .fade-out. */
+body .search-scroll-target {
+  border-radius: var(--radius-small);
+  background: var(--textHighlight);
+}

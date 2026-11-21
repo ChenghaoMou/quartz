@@ -1,3 +1,5 @@
+@use "park";
+
 /* Sidenotes and supporting content */
 
 .sidenote-anchor {
@@ -13,7 +15,7 @@
   margin: 0 0.12rem;
   padding: 0;
   border: 0;
-  border-radius: 2px;
+  border-radius: var(--radius-small);
   background: transparent;
   color: var(--cyan);
   font-family: var(--mono);
@@ -62,12 +64,13 @@
 
   display: none;
   width: auto;
-  margin: 0.75rem 0 1rem;
-  padding: 0.75rem 1rem;
+  margin: var(--space-3) 0 var(--space-4);
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-medium);
   background: var(--sidenote-idle-background);
   color: var(--muted);
-  font-size: 0.8rem;
-  line-height: 1.5;
+  font-size: var(--text-7);
+  line-height: var(--leading-normal);
   scroll-margin-block: 6rem;
   transition:
     color 180ms ease,
@@ -111,7 +114,7 @@
 }
 
 .page-footer {
-  margin-top: 3rem;
+  margin-top: var(--space-12);
   padding-top: 0;
   border-top: 0;
 }
@@ -123,17 +126,15 @@
 }
 
 .backlinks {
-  margin-bottom: 2rem;
-  font-size: 0.85rem;
+  margin-bottom: var(--space-8);
+  font-size: var(--text-7);
 }
 
 .backlinks h3 {
-  margin-bottom: 0.75rem;
+  margin-bottom: var(--space-3);
   color: var(--muted);
-  font-size: 0.9rem;
-  font-weight: 500;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
+  font-size: var(--text-7);
+  font-weight: var(--font-medium);
 }
 
 .backlinks ul {
@@ -143,7 +144,7 @@
 }
 
 .backlinks li {
-  margin-bottom: 0.5rem;
+  margin-bottom: var(--space-2);
 }
 
 .backlinks a {
@@ -155,16 +156,62 @@
 }
 
 footer {
+  --park-opacity: 0.9;
+  position: relative;
+  isolation: isolate;
   display: flex;
   flex-wrap: wrap;
-  gap: 0.75rem 1.5rem;
+  gap: var(--space-3) var(--space-6);
   justify-content: space-between;
+  align-content: start;
   width: 100%;
-  margin: 4rem 0 0;
-  padding: 2rem 0 3rem;
-  border-top: 1px solid var(--rule);
+  /* The footer takes the picture's proportions; text that wraps on narrow
+     screens can still grow it. */
+  aspect-ratio: #{park.$cols} / #{park.$rows};
+  margin: var(--space-16) 0 0;
+  padding: var(--space-8) var(--space-4);
   color: var(--muted);
-  font-size: 0.8rem;
+  font-size: var(--text-7);
+  text-shadow: 0 0 0.75rem var(--paper);
+}
+
+/* Herbert Park as a full-colour dot-matrix picture behind the footer: one pixel
+   per dot, scaled up crisply and cut into square dots by a grid mask. An eased
+   gradient fades it into the page from the top, under the text. */
+footer::after {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: url("static/herbert-park.png") 0 0 / 100% 100% no-repeat;
+  image-rendering: pixelated;
+  mask:
+    url(park.$dots) 0 0 / 100% 100% no-repeat,
+    linear-gradient(
+      to bottom,
+      transparent,
+      rgb(0 0 0 / 0.04) 10%,
+      rgb(0 0 0 / 0.16) 22%,
+      rgb(0 0 0 / 0.38) 34%,
+      rgb(0 0 0 / 0.66) 46%,
+      rgb(0 0 0 / 0.88) 58%,
+      #000 70%,
+      #000 92%,
+      transparent
+    );
+  mask-composite: intersect;
+  opacity: var(--park-opacity);
+  pointer-events: none;
+  content: "";
+}
+
+:root[saved-theme="dark"] footer {
+  --park-opacity: 0.75;
+}
+
+@media print {
+  footer::after {
+    display: none;
+  }
 }
 
 footer p,
@@ -174,7 +221,7 @@ footer ul {
 
 footer ul {
   display: flex;
-  gap: 1rem;
+  gap: var(--space-4);
 }
 
 footer li {

@@ -1,13 +1,18 @@
 /* Article */
 
 body:not([data-slug="index"]) .page-header > .popover-hint {
-  margin-top: 3rem;
+  margin-top: var(--space-12);
+}
+
+/* Title, meta and tags read as the note's own header: one section step to the body. */
+body:not([data-slug="index"]) .page > #quartz-body .page-header {
+  margin-bottom: var(--space-8);
 }
 
 .breadcrumb-container {
-  margin: 0 0 1.5rem;
+  margin: 0 0 var(--space-6);
   color: var(--muted);
-  font-size: 0.8rem;
+  font-size: var(--text-7);
 }
 
 .breadcrumb-container a,
@@ -21,107 +26,140 @@ body:not([data-slug="index"]) .page-header > .popover-hint {
 
 .article-title {
   max-width: 34rem;
-  margin: 0 0 1.25rem;
+  margin: 0 0 var(--space-5);
   color: var(--ink);
   font-family: var(--sans);
-  font-size: 1.75rem;
-  font-weight: 500;
-  letter-spacing: -0.01em;
-  line-height: 1.2;
+  font-size: var(--text-1);
+  font-weight: var(--font-semibold);
+  line-height: var(--leading-tight);
 }
 
 .content-meta {
-  margin: 0 0 0.5rem;
+  margin: 0 0 var(--space-2);
   color: var(--muted);
-  font-size: 0.85rem;
+  font-size: var(--text-7);
 }
 
 .content-meta time {
   font-family: var(--mono);
 }
 
-.tags {
-  gap: 0.5rem;
-  margin: 0.5rem 0 0;
+/* Tags are plain "#tag" text in the meta style: they share the column's left edge,
+   and there is no box to crowd the line below. Quartz's tag-link rule adds a pill
+   with padding and margin, so these selectors are written to outrank it. */
+/* ul.tags outranks the tag-list plugin's later `.tags { margin: 1rem 0 }`. */
+ul.tags {
+  gap: var(--space-1) var(--space-3);
+  margin: var(--space-2) 0 0;
   padding: 0;
 }
 
-.tags > li > a {
+.tags > li > a.internal.tag-link {
+  margin: 0;
   padding: 0;
+  border: 0;
   border-radius: 0;
   background: transparent;
   color: var(--muted);
-  font-size: 0.8rem;
+  font-size: var(--text-7);
+  line-height: var(--leading-normal);
+  transition: color var(--transition-fast);
 }
 
-.tags > li > a:hover {
+.tags > li > a.internal.tag-link::before {
+  color: var(--faint);
+}
+
+.tags > li > a.internal.tag-link:hover {
   color: var(--blue);
+  text-decoration: underline;
+  text-decoration-color: var(--faint);
 }
 
 .note-status {
   display: flex;
-  gap: 0.75rem;
+  gap: var(--space-3);
   align-items: baseline;
   max-width: 38rem;
-  margin: 1.25rem 0 0;
-  padding-left: 0.75rem;
+  margin: var(--space-5) 0 0;
+  padding-left: var(--space-3);
   border-left: 2px solid var(--orange);
 }
 
 .note-status span {
   flex: 0 0 auto;
   color: var(--orange);
-  font-size: 0.72rem;
+  font-size: var(--text-8);
+  font-weight: var(--font-medium);
 }
 
 .note-status p {
   margin: 0;
   color: var(--muted);
-  font-size: 0.85rem;
-  line-height: 1.5;
+  font-size: var(--text-7);
+  line-height: var(--leading-normal);
 }
 
 .center > article {
   width: 100%;
   max-width: var(--reading-width);
   margin: 0;
-  padding: 0 0 2rem;
+  padding: 0 0 var(--space-8);
 }
 
 .markdown-preview-view {
   color: var(--text);
   font-family: var(--sans);
-  font-size: 1rem;
-  line-height: 1.7;
+  font-size: var(--text-6);
+  line-height: var(--leading-prose);
 }
 
 .markdown-preview-view p,
 .markdown-preview-view li {
   color: var(--text);
-  line-height: 1.7;
+  line-height: var(--leading-prose);
+}
+
+.markdown-preview-view p {
+  margin: 0 0 var(--space-4);
+}
+
+.markdown-preview-view li {
+  margin-bottom: var(--space-1);
 }
 
 .markdown-preview-view h2 {
-  margin-top: 2.5rem;
-  font-size: 1.4rem;
+  margin: var(--space-10) 0 var(--space-4);
+  font-size: var(--text-3);
 }
 
 .markdown-preview-view h3 {
-  margin-top: 2rem;
-  font-size: 1.15rem;
+  margin: var(--space-8) 0 var(--space-3);
+  font-size: var(--text-4);
 }
 
 .markdown-preview-view h4,
 .markdown-preview-view h5,
 .markdown-preview-view h6 {
-  margin-top: 1.75rem;
-  font-size: 1rem;
+  margin: var(--space-6) 0 var(--space-2);
+  font-size: var(--text-6);
 }
 
 .markdown-preview-view a.internal {
   padding: 0;
   border-radius: 0;
   background: transparent;
+}
+
+/* As in Oat, links inside running text are underlined; the rule stays quiet until hover. */
+.markdown-preview-view :is(p, li, blockquote, td) a {
+  text-decoration: underline;
+  text-decoration-color: var(--faint);
+  text-decoration-thickness: 1px;
+}
+
+.markdown-preview-view :is(p, li, blockquote, td) a:hover {
+  text-decoration-color: currentcolor;
 }
 
 .markdown-preview-view a.external .external-icon {
@@ -137,8 +175,8 @@ body:not([data-slug="index"]) .page-header > .popover-hint {
 }
 
 .markdown-preview-view blockquote {
-  margin: 1.5rem 0;
-  padding: 0 0 0 1rem;
+  margin: var(--space-6) 0;
+  padding: 0 0 0 var(--space-4);
   border-left: 2px solid var(--rule);
   color: var(--muted);
 }
@@ -147,62 +185,86 @@ body:not([data-slug="index"]) .page-header > .popover-hint {
   color: var(--muted);
 }
 
+.markdown-preview-view hr {
+  margin: var(--space-8) 0;
+  border: 0;
+  border-top: 1px solid var(--rule);
+}
+
 .markdown-preview-view mark {
+  padding: calc(var(--space-1) / 2) var(--space-1);
+  border-radius: var(--radius-small);
   background: var(--textHighlight);
 }
 
 .markdown-preview-view code {
-  padding: 0.1em 0.25em;
-  border-radius: 2px;
+  padding: calc(var(--space-1) / 2) var(--space-1);
+  border-radius: var(--radius-small);
   background: var(--paper-2);
   color: var(--text);
   font-family: var(--mono);
-  font-size: 0.85em;
+  font-size: 0.875em;
 }
 
 .markdown-preview-view pre {
-  margin: 1.5rem 0;
-  border: 1px solid var(--rule);
-  border-radius: 3px;
+  margin: var(--space-6) 0;
+  border: 0;
+  border-radius: var(--radius-medium);
   background: var(--paper-2) !important;
   box-shadow: none;
 }
 
 .markdown-preview-view pre > code {
-  padding: 1rem;
+  padding: var(--space-4);
   background: transparent;
-  line-height: 1.55;
+  line-height: var(--leading-normal);
 }
 
+/* Oat tables: horizontal rules only, quiet header. */
 .markdown-preview-view table {
   min-width: 100%;
-  margin: 1rem 0;
+  margin: var(--space-4) 0;
   border-collapse: collapse;
-  font-size: 0.85rem;
+  font-size: var(--text-7);
 }
 
 .markdown-preview-view th,
 .markdown-preview-view td {
-  padding: 0.55rem 0.65rem;
-  border: 1px solid var(--rule);
+  padding: var(--space-3) var(--space-2);
+  border: 0;
   text-align: left;
   vertical-align: top;
+  overflow-wrap: break-word;
 }
 
 .markdown-preview-view th {
-  background: var(--paper-2);
+  background: transparent;
+  color: var(--muted);
+  font-weight: var(--font-medium);
+}
+
+.markdown-preview-view thead {
+  border-bottom: 1px solid var(--rule);
+}
+
+.markdown-preview-view tbody tr {
+  border-bottom: 1px solid var(--rule);
+}
+
+.markdown-preview-view tbody tr:last-child {
+  border-bottom: 0;
 }
 
 .markdown-preview-view img {
   display: block;
   max-width: 100%;
   height: auto;
-  margin: 1.5rem auto;
-  border-radius: 2px;
+  margin: var(--space-6) auto;
+  border-radius: var(--radius-medium);
 }
 
 .callout {
   border: 1px solid rgba(var(--callout-color), 0.3);
-  border-radius: 3px;
+  border-radius: var(--radius-medium);
   box-shadow: none;
 }

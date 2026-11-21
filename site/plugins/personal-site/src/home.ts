@@ -5,7 +5,7 @@ import type {
   QuartzComponentConstructor,
   QuartzPluginData,
 } from "@quartz-community/types"
-import { formatDate, resolveRelative } from "@quartz-community/utils"
+import { resolveRelative } from "@quartz-community/utils"
 
 type Frontmatter = {
   description?: string
@@ -78,7 +78,15 @@ export const HomeHero: QuartzComponentConstructor = () => {
   return Component
 }
 
-// Date-only value built from the same local calendar date that formatDate displays,
+const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+
+// Fixed-width "07 Jul 2025": en-GB's "Sept" would knock the feed's date column out of line.
+function feedDate(date: Date) {
+  const day = String(date.getDate()).padStart(2, "0")
+  return `${day} ${months[date.getMonth()]} ${date.getFullYear()}`
+}
+
+// Date-only value built from the same local calendar date that feedDate displays,
 // so the machine-readable date never drifts a day from the visible one.
 function calendarDate(date: Date) {
   const month = String(date.getMonth() + 1).padStart(2, "0")
@@ -103,7 +111,7 @@ function publicWriting(allFiles: (QuartzPluginData & Record<string, unknown>)[])
 
 export const HomeFeed: QuartzComponentConstructor<HomeFeedOptions> = (options = {}) => {
   const limit = options.limit ?? 24
-  const Component: QuartzComponent = ({ allFiles, fileData, cfg }) => {
+  const Component: QuartzComponent = ({ allFiles, fileData }) => {
     const page = asPage(fileData)
     if (page.slug !== "index") return null
 
@@ -139,7 +147,7 @@ export const HomeFeed: QuartzComponentConstructor<HomeFeedOptions> = (options = 
                           date
                             ? jsx("time", {
                                 dateTime: calendarDate(date),
-                                children: formatDate(date, cfg.locale),
+                                children: feedDate(date),
                               })
                             : null,
                         ],

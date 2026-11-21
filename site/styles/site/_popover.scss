@@ -1,0 +1,94 @@
+/* Link previews: a compact card, not a shrunken copy of the page.
+   Quartz's popover styles sit in a cascade layer, so these plain rules win. */
+
+.popover > .popover-inner {
+  width: 26rem;
+  max-height: 22rem;
+  padding: var(--space-4) var(--space-5) var(--space-5);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius-large);
+  background: var(--paper);
+  box-shadow:
+    0 2px 4px -1px rgb(16 15 15 / 6%),
+    0 12px 32px -12px rgb(16 15 15 / 18%);
+  color: var(--text);
+  font-family: var(--sans);
+  font-size: var(--text-7);
+  line-height: var(--leading-normal);
+}
+
+.popover > .popover-inner:is([data-content-type*="image"], [data-content-type*="pdf"]) {
+  padding: 0;
+}
+
+/* The breadcrumb repeats what the link already said. */
+.popover .breadcrumb-container {
+  display: none;
+}
+
+.popover .popover-hint {
+  margin: 0;
+}
+
+.popover .article-title,
+.popover h1 {
+  margin: 0 0 var(--space-1);
+  font-size: var(--text-4);
+}
+
+.popover .content-meta {
+  margin: 0;
+  font-size: var(--text-8);
+}
+
+.popover ul.tags {
+  margin-top: var(--space-2);
+}
+
+.popover .note-status {
+  margin-top: var(--space-3);
+}
+
+.popover article {
+  margin-top: var(--space-3);
+  padding: var(--space-3) 0 0;
+  border-top: 1px solid var(--rule);
+}
+
+.popover .markdown-preview-view,
+.popover .markdown-preview-view :is(p, li) {
+  font-size: var(--text-7);
+  line-height: var(--leading-normal);
+}
+
+.popover .markdown-preview-view p {
+  margin-bottom: var(--space-2);
+}
+
+.popover .markdown-preview-view :is(ul, ol) {
+  margin: 0 0 var(--space-2);
+  padding-left: var(--space-5);
+}
+
+.popover .markdown-preview-view li {
+  margin-bottom: calc(var(--space-1) / 2);
+}
+
+.popover .markdown-preview-view h2 {
+  margin: var(--space-4) 0 var(--space-2);
+  font-size: var(--text-6);
+}
+
+.popover .markdown-preview-view :is(h3, h4, h5, h6) {
+  margin: var(--space-3) 0 var(--space-1);
+  font-size: var(--text-7);
+}
+
+.popover .markdown-preview-view :is(pre, blockquote, img, table) {
+  margin: var(--space-3) 0;
+}
+
+.popover .sidenote-ref,
+.popover .sidenote {
+  display: none;
+}

@@ -1,7 +1,7 @@
 import { jsx, jsxs } from "preact/jsx-runtime"
 import type { FullSlug, QuartzComponent, QuartzComponentConstructor } from "@quartz-community/types"
 import { resolveRelative } from "@quartz-community/utils"
-import { appearanceScript, PullSwitch } from "./appearance.js"
+import { appearanceScript, ThemeToggleButton } from "./appearance.js"
 
 const DitherSigil = () =>
   jsx("span", {
@@ -33,11 +33,7 @@ export const SiteChrome: QuartzComponentConstructor = () => {
             }),
           ],
         }),
-        jsx("div", {
-          class: "site-switch-mount",
-          children: jsx(PullSwitch, { placement: "sidebar" }),
-        }),
-        jsx(PullSwitch, { placement: "compact" }),
+        jsx(ThemeToggleButton, {}),
       ],
     })
   }

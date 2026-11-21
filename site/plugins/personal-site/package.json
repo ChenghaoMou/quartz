@@ -37,10 +37,10 @@
         "defaultPosition": "header",
         "defaultPriority": 10
       },
-      "AppearancePull": {
-        "displayName": "Appearance Pull Switch",
-        "defaultPosition": "right",
-        "defaultPriority": 10
+      "ThemeToggle": {
+        "displayName": "Theme Toggle",
+        "defaultPosition": "header",
+        "defaultPriority": 20
       },
       "InteractionSounds": {
         "displayName": "Interaction Sounds",
