@@ -125,7 +125,9 @@ test("publishing policy requires publish flags and keeps private folders and vau
   }
 
   const plugin = (source) => config.plugins.find((candidate) => candidate.source === source)
-  assert.equal(plugin("@quartz-community/remove-draft").enabled, true)
+  // Drafts are filtered by a Quartz built-in, on unless configuration.drafts disables it.
+  assert.equal(plugin("@quartz-community/remove-draft"), undefined)
+  assert.notEqual(config.configuration.drafts?.enabled, false)
   assert.equal(plugin("@quartz-community/explicit-publish").enabled, true)
 })
 
