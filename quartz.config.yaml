@@ -52,6 +52,13 @@ configuration:
         tertiary: "#da702c"
         highlight: "rgba(67, 133, 190, 0.18)"
         textHighlight: "rgba(173, 131, 1, 0.42)"
+  links:
+    markdownLinkResolution: shortest
+  fonts:
+    enabled: false
+  contentIndex:
+    enableSiteMap: true
+    enableRSS: false
 plugins:
   - source: "@quartz-community/note-properties"
     enabled: true
@@ -88,10 +95,6 @@ plugins:
       position: left
       priority: 30
       condition: not-index
-  - source: "@quartz-community/crawl-links"
-    enabled: true
-    options: { markdownLinkResolution: shortest }
-    order: 60
   - source: "@quartz-community/description"
     enabled: true
     order: 70
@@ -102,20 +105,12 @@ plugins:
     enabled: true
     options: { renderEngine: katex }
     order: 80
-  - source: "@quartz-community/quartz-fonts"
-    enabled: false
-    options: { useThemeFonts: true, fontOrigin: local }
-  - source: "@quartz-community/remove-draft"
-    enabled: true
   - source: "@quartz-community/explicit-publish"
     # Only Markdown with `publish: true` is rendered. The folder ignore list
     # above stays as a second guard for private areas of the vault.
     enabled: true
   - source: "./site/plugins/safe-alias-redirects"
     enabled: true
-  - source: "@quartz-community/content-index"
-    enabled: true
-    options: { enableSiteMap: true, enableRSS: false }
   - source: "@quartz-community/favicon"
     enabled: true
   - source: "@quartz-community/og-image"
